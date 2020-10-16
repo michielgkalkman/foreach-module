@@ -24,8 +24,6 @@ import org.apache.maven.settings.Server;
 import org.apache.maven.settings.Settings;
 import org.apache.maven.settings.SettingsUtils;
 import org.apache.maven.settings.io.xpp3.SettingsXpp3Writer;
-import org.apache.maven.shared.release.ReleaseResult;
-import org.apache.maven.shared.release.env.ReleaseEnvironment;
 import org.codehaus.plexus.logging.LogEnabled;
 import org.codehaus.plexus.logging.Logger;
 import org.codehaus.plexus.util.StringUtils;
@@ -80,14 +78,15 @@ public abstract class AbstractMavenExecutor
                 goalsList.add( token );
             }
         }
-        executeGoals( workingDirectory, goalsList, releaseEnvironment, interactive, additionalArguments, pomFileName,
-                      result );
+        executeGoals( workingDirectory, goalsList, releaseEnvironment, interactive, additionalArguments, pomFileName
+                , result);
     }
 
     protected abstract void executeGoals( File workingDirectory, List<String> goals,
                                           ReleaseEnvironment releaseEnvironment, boolean interactive,
-                                          String additionalArguments, String pomFileName, ReleaseResult result )
-        throws MavenExecutorException;
+                                          String additionalArguments, String pomFileName,
+                                          ReleaseResult releaseResult)
+        throws MavenExecutorException, MavenExecutorException;
 
     protected final Logger getLogger()
     {

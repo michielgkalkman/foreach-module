@@ -2,11 +2,6 @@ package org.taHjaj.wo;
 
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
-import org.apache.maven.shared.release.ReleaseExecutionException;
-import org.apache.maven.shared.release.ReleaseResult;
-import org.apache.maven.shared.release.config.ReleaseDescriptor;
-import org.apache.maven.shared.release.env.ReleaseEnvironment;
-import org.apache.maven.shared.release.phase.AbstractRunGoalsPhase;
 import org.codehaus.plexus.util.StringUtils;
 import org.sonatype.plexus.components.cipher.PlexusCipherException;
 
@@ -19,7 +14,7 @@ import java.util.Map;
 public class GoalsRunner
         extends AbstractRunGoalsPhase {
 
-    private Map<String, MavenExecutor> mavenExecutors;
+    private final Map<String, MavenExecutor> mavenExecutors;
 
     public GoalsRunner(Log log) throws PlexusCipherException {
         enableLogging( new LogLogger(log));
@@ -32,32 +27,25 @@ public class GoalsRunner
     @Override
     protected String getGoals( ReleaseDescriptor releaseDescriptor )
     {
-        return releaseDescriptor.getPerformGoals();
+        return releaseDescriptor.getGoals();
     }
 
     @Override
     public ReleaseResult execute(ReleaseDescriptor releaseDescriptor, ReleaseEnvironment releaseEnvironment,
                                  List<MavenProject> reactorProjects )
-            throws ReleaseExecutionException
     {
         final String mavenExecutorId = releaseEnvironment.getMavenExecutorId();
         getLogger().info( String.format( "mavenexecutorid: %s%n", mavenExecutorId));
 
         reactorProjects.forEach( mavenProject -> {
             try {
-                System.out.printf("mavenProject: %s%n", mavenProject.getBasedir().getCanonicalPath());
                 final List<String> modules = mavenProject.getModules();
                 boolean fHasModules = !modules.isEmpty();
 
                 if( fHasModules) {
-                    System.out.printf("mavenProject: %s has the following modules modules:%s%n", mavenProject.getBasedir().getCanonicalPath(),
-                            org.apache.commons.lang3.StringUtils.join(modules));
+                    getLogger().info(  String.format( "Project %s has modules - skipped%n", mavenProject.getBasedir().getCanonicalPath()));
                 } else {
-                    System.out.printf("mavenProject: %s has no modules%n", mavenProject.getBasedir().getCanonicalPath());
-                }
-
-                if( !fHasModules) {
-                    System.out.printf("mavenProject: runLogic in %s%n", mavenProject.getBasedir().getCanonicalPath());
+                    getLogger().info(  String.format( "Project %s has no modules - executing goald%n", mavenProject.getBasedir().getCanonicalPath()));
                     runLogic(releaseDescriptor, releaseEnvironment, mavenProject, false);
                 }
             } catch (IOException | ReleaseExecutionException e) {
@@ -72,8 +60,6 @@ public class GoalsRunner
             throws ReleaseExecutionException
     {
         String pomFileName = releaseDescriptor.getPomFileName();
-        final boolean useReleaseProfile = releaseDescriptor.isUseReleaseProfile();
-
         String additionalArguments = getAdditionalArguments( releaseDescriptor );
 
         if ( pomFileName == null )
@@ -108,9 +94,7 @@ public class GoalsRunner
 
     @Override
     public ReleaseResult simulate( ReleaseDescriptor releaseDescriptor, ReleaseEnvironment releaseEnvironment,
-                                   List<MavenProject> reactorProjects )
-            throws ReleaseExecutionException
-    {
+                                   List<MavenProject> reactorProjects ) {
         reactorProjects.forEach( mavenProject -> {
             try {
                 System.out.printf("mavenProject: %s%n", mavenProject.getBasedir().getCanonicalPath());
@@ -128,7 +112,7 @@ public class GoalsRunner
     {
         final String pomFileName1 = releaseDescriptor.getPomFileName();
         final String mavenExecutorId = releaseEnvironment.getMavenExecutorId();
-        final String goals = releaseDescriptor.getPerformGoals();
+        final String goals = releaseDescriptor.getGoals();
 
         ReleaseResult result = new ReleaseResult();
 

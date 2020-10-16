@@ -16,7 +16,6 @@ package org.taHjaj.wo;
  * limitations under the License.
  */
 
-import org.apache.maven.artifact.ArtifactUtils;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.DistributionManagement;
 import org.apache.maven.plugin.AbstractMojo;
@@ -27,18 +26,12 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.settings.Settings;
-import org.apache.maven.shared.release.ReleaseExecutionException;
-import org.apache.maven.shared.release.config.ReleaseDescriptorBuilder;
-import org.apache.maven.shared.release.config.ReleaseUtils;
-import org.apache.maven.shared.release.env.DefaultReleaseEnvironment;
-import org.apache.maven.shared.release.env.ReleaseEnvironment;
 import org.codehaus.plexus.util.StringUtils;
 import org.sonatype.plexus.components.cipher.PlexusCipherException;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -83,22 +76,12 @@ public final class ForeachModuleMojo
     private File localRepoDirectory;
 
     /**
-     * Role hint of the {@link org.apache.maven.shared.release.exec.MavenExecutor} implementation to use.
+     * Role hint of the {@link MavenExecutor} implementation to use.
      *
      * @since 2.0-beta-8
      */
     @Parameter( defaultValue = "invoker", property = "mavenExecutorId" )
     private String mavenExecutorId;
-
-    /**
-     * The role-hint for the {@link org.apache.maven.shared.release.strategy.Strategy}
-     * implementation used to specify the phases per goal.
-     *
-     * @since 3.0.0
-     * @see org.apache.maven.shared.release.strategies.DefaultStrategy
-     */
-    @Parameter( defaultValue = "default", property = "releaseStrategyId" )
-    private String releaseStrategyId;
 
     /**
      */
@@ -150,13 +133,12 @@ public final class ForeachModuleMojo
             // Note that the working directory here is not the same as in the release configuration, so don't reuse that
             ReleaseDescriptorBuilder releaseDescriptor = createReleaseDescriptor();
 
-            createGoals();
-            releaseDescriptor.setPerformGoals( goals );
+            releaseDescriptor.setGoals( goals );
 
-            new GoalsRunner(getLog()).execute(ReleaseUtils.buildReleaseDescriptor(releaseDescriptor), getReleaseEnvironment(),
+            new GoalsRunner(getLog()).execute( releaseDescriptor.build(), getReleaseEnvironment(),
                     getReactorProjects());
         }
-        catch (ReleaseExecutionException | PlexusCipherException e )
+        catch (PlexusCipherException e )
         {
             throw new MojoExecutionException( e.getMessage(), e );
         }
@@ -199,31 +181,16 @@ public final class ForeachModuleMojo
             descriptor.setPomFileName( workingDirectory.relativize( rootBasedir ).resolve( pomFileName ).toString() );
         }
 
-        for ( MavenProject project : reactorProjects )
-        {
-            String versionlessKey = ArtifactUtils.versionlessKey( project.getGroupId(), project.getArtifactId() );
-            descriptor.putOriginalVersion( versionlessKey, project.getVersion() );
-        }
-
         descriptor.setAdditionalArguments( this.arguments );
 
         List<String> profileIds = session.getRequest().getActiveProfiles();
-        String additionalProfiles = getAdditionalProfiles();
 
-        if ( !profileIds.isEmpty() || StringUtils.isNotBlank( additionalProfiles ) )
+        if ( !profileIds.isEmpty() )
         {
             List<String> profiles = new ArrayList<>( profileIds );
 
-            if ( additionalProfiles != null )
-            {
-                profiles.addAll( Arrays.asList( additionalProfiles.split( "," ) ) );
-            }
-
             descriptor.setActivateProfiles( profiles );
         }
-
-        descriptor.setReleaseStrategyId( releaseStrategyId );
-
         return descriptor;
     }
 
@@ -244,23 +211,6 @@ public final class ForeachModuleMojo
         return basePath;
     }
 
-    /** Just here so it may be overridden by StageReleaseMojo */
-    void createGoals()
-    {
-        if ( goals == null )
-        {
-            // set default
-            goals = "deploy";
-            DistributionManagement distributionManagement = project.getDistributionManagement();
-
-            if ( distributionManagement != null
-                    && distributionManagement.getSite() != null )
-            {
-                goals += " site-deploy";
-            }
-        }
-    }
-
     /**
      * Gets the list of projects in the build reactor.
      *
@@ -269,15 +219,5 @@ public final class ForeachModuleMojo
     public List<MavenProject> getReactorProjects()
     {
         return reactorProjects;
-    }
-
-    /**
-     * Gets the comma separated list of additional profiles for the release build.
-     *
-     * @return additional profiles to enable during release
-     */
-    protected String getAdditionalProfiles()
-    {
-        return null;
     }
 }

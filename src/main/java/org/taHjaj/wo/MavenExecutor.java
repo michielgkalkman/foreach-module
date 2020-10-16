@@ -19,9 +19,6 @@ package org.taHjaj.wo;
  * under the License.
  */
 
-import org.apache.maven.shared.release.ReleaseResult;
-import org.apache.maven.shared.release.env.ReleaseEnvironment;
-
 import java.io.File;
 
 /**
@@ -43,7 +40,8 @@ public interface MavenExecutor
      * @param result              holds all results of the execution
      * @throws MavenExecutorException if an error occurred executing Maven
      */
-    void executeGoals( File workingDirectory, String goals, ReleaseEnvironment releaseEnvironment,
-                       boolean interactive, String additionalArguments, String pomFileName, ReleaseResult result )
+    void executeGoals(File workingDirectory, String goals, ReleaseEnvironment releaseEnvironment,
+                      boolean interactive, String additionalArguments, String pomFileName,
+                      ReleaseResult result)
         throws MavenExecutorException;
 }
