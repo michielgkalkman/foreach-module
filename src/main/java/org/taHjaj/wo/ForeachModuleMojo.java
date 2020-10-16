@@ -18,6 +18,7 @@ package org.taHjaj.wo;
 
 import org.apache.maven.artifact.ArtifactUtils;
 import org.apache.maven.execution.MavenSession;
+import org.apache.maven.model.DistributionManagement;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -250,8 +251,10 @@ public final class ForeachModuleMojo
         {
             // set default
             goals = "deploy";
-            if ( project.getDistributionManagement() != null
-                    && project.getDistributionManagement().getSite() != null )
+            DistributionManagement distributionManagement = project.getDistributionManagement();
+
+            if ( distributionManagement != null
+                    && distributionManagement.getSite() != null )
             {
                 goals += " site-deploy";
             }

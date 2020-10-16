@@ -23,11 +23,13 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
+import org.apache.maven.settings.Settings;
 import org.apache.maven.settings.io.xpp3.SettingsXpp3Writer;
 import org.apache.maven.shared.invoker.*;
 import org.apache.maven.shared.release.ReleaseResult;
 import org.apache.maven.shared.release.env.ReleaseEnvironment;
 import org.codehaus.plexus.logging.Logger;
+import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.CommandLineUtils;
 import org.sonatype.plexus.components.cipher.PlexusCipherException;
 
@@ -368,9 +370,10 @@ public class InvokerMavenExecutor
 
         final File mavenPath;
         // if null we use the current one
-        if ( releaseEnvironment.getMavenHome() != null )
+        final File mavenHome1 = releaseEnvironment.getMavenHome();
+        if ( mavenHome1 != null )
         {
-            mavenPath = releaseEnvironment.getMavenHome();
+            mavenPath = mavenHome1;
         }
         else
         {
@@ -399,7 +402,8 @@ public class InvokerMavenExecutor
         }
 
         File settingsFile = null;
-        if ( releaseEnvironment.getSettings() != null )
+        final Settings settings = releaseEnvironment.getSettings();
+        if ( settings != null )
         {
             // Have to serialize to a file as if Maven is embedded, there may not actually be a settings.xml on disk
             try
@@ -409,7 +413,7 @@ public class InvokerMavenExecutor
                 
                 try ( FileWriter fileWriter = new FileWriter( settingsFile ) )
                 {
-                    writer.write( fileWriter, encryptSettings( releaseEnvironment.getSettings() ) );
+                    writer.write( fileWriter, encryptSettings(settings) );
                 }
                 req.setUserSettingsFile( settingsFile );
             }
@@ -434,14 +438,16 @@ public class InvokerMavenExecutor
             {
                 InvocationResult invocationResult = invoker.execute( req );
 
-                if ( invocationResult.getExecutionException() != null )
+                final CommandLineException executionException = invocationResult.getExecutionException();
+                if ( executionException != null )
                 {
                     throw new MavenExecutorException( "Error executing Maven.",
-                                                      invocationResult.getExecutionException() );
+                            executionException);
                 }
-                if ( invocationResult.getExitCode() != 0 )
+                final int exitCode = invocationResult.getExitCode();
+                if ( exitCode != 0 )
                 {
-                    throw new MavenExecutorException("Maven execution failed, exit code: '" + invocationResult.getExitCode() + "\'", invocationResult.getExitCode() );
+                    throw new MavenExecutorException("Maven execution failed, exit code: '" + exitCode + "\'", exitCode);
                 }
             }
             catch ( MavenInvocationException e )
