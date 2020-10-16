@@ -76,18 +76,6 @@ public class GoalsRunner
 
         String additionalArguments = getAdditionalArguments( releaseDescriptor );
 
-        if (useReleaseProfile)
-        {
-            if ( !StringUtils.isEmpty( additionalArguments ) )
-            {
-                additionalArguments = additionalArguments + " -DperformRelease=true";
-            }
-            else
-            {
-                additionalArguments = "-DperformRelease=true";
-            }
-        }
-
         if ( pomFileName == null )
         {
             pomFileName = "pom.xml";
