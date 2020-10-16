@@ -1,0 +1,227 @@
+package org.taHjaj.wo;
+
+import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.project.MavenProject;
+import org.apache.maven.shared.release.ReleaseExecutionException;
+import org.apache.maven.shared.release.ReleaseResult;
+import org.apache.maven.shared.release.config.ReleaseDescriptor;
+import org.apache.maven.shared.release.env.ReleaseEnvironment;
+import org.apache.maven.shared.release.phase.AbstractRunGoalsPhase;
+import org.codehaus.plexus.util.StringUtils;
+import org.sonatype.plexus.components.cipher.PlexusCipherException;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class GoalsRunner
+        extends AbstractRunGoalsPhase {
+
+    private Map<String, MavenExecutor> mavenExecutors;
+
+    public GoalsRunner(Log log) throws PlexusCipherException {
+        enableLogging( new LogLogger(log));
+        mavenExecutors = new HashMap<>();
+        final InvokerMavenExecutor invokerMavenExecutor = new InvokerMavenExecutor();
+        invokerMavenExecutor.enableLogging(getLogger());
+        mavenExecutors.put( "invoker", invokerMavenExecutor);
+    }
+
+    @Override
+    protected String getGoals( ReleaseDescriptor releaseDescriptor )
+    {
+        return releaseDescriptor.getPerformGoals();
+    }
+
+    @Override
+    public ReleaseResult execute(ReleaseDescriptor releaseDescriptor, ReleaseEnvironment releaseEnvironment,
+                                 List<MavenProject> reactorProjects )
+            throws ReleaseExecutionException
+    {
+        getLogger().info( String.format( "mavenexecutorid: %s%n", releaseEnvironment.getMavenExecutorId()));
+
+        reactorProjects.forEach( mavenProject -> {
+            try {
+                System.out.printf("mavenProject: %s%n", mavenProject.getBasedir().getCanonicalPath());
+                final List<String> modules = mavenProject.getModules();
+                boolean fHasModules = !modules.isEmpty();
+
+                if( fHasModules) {
+                    System.out.printf("mavenProject: %s has the following modules modules:%s%n", mavenProject.getBasedir().getCanonicalPath(),
+                            org.apache.commons.lang3.StringUtils.join(modules));
+                } else {
+                    System.out.printf("mavenProject: %s has no modules%n", mavenProject.getBasedir().getCanonicalPath());
+                }
+
+                if( !fHasModules) {
+                    System.out.printf("mavenProject: runLogic in %s%n", mavenProject.getBasedir().getCanonicalPath());
+                    runLogic(releaseDescriptor, releaseEnvironment, mavenProject, false);
+                }
+            } catch (IOException | ReleaseExecutionException e) {
+                e.printStackTrace();
+            }
+        });
+        return null;
+    }
+
+    private ReleaseResult runLogic( ReleaseDescriptor releaseDescriptor, ReleaseEnvironment releaseEnvironment,
+                                    MavenProject reactorProject, boolean simulate )
+            throws ReleaseExecutionException
+    {
+        String additionalArguments = getAdditionalArguments( releaseDescriptor );
+
+        if ( releaseDescriptor.isUseReleaseProfile() )
+        {
+            if ( !StringUtils.isEmpty( additionalArguments ) )
+            {
+                additionalArguments = additionalArguments + " -DperformRelease=true";
+            }
+            else
+            {
+                additionalArguments = "-DperformRelease=true";
+            }
+        }
+
+        String pomFileName = releaseDescriptor.getPomFileName();
+        if ( pomFileName == null )
+        {
+            pomFileName = "pom.xml";
+        }
+
+        // ensure we don't use the release pom for the perform goals
+        // ^^ paranoia? A MavenExecutor has already access to this. Probably worth refactoring.
+        if ( !StringUtils.isEmpty( additionalArguments ) )
+        {
+            additionalArguments = additionalArguments + " -f " + pomFileName;
+        }
+        else
+        {
+            additionalArguments = "-f " + pomFileName;
+        }
+
+        if ( simulate )
+        {
+            ReleaseResult result = new ReleaseResult();
+
+            logDebug( result, "Additional arguments: " + additionalArguments );
+
+            logInfo( result, "Executing perform goals  - since this is simulation mode these goals are skipped." );
+
+            return result;
+        }
+
+
+//        PomFinder pomFinder = new PomFinder( getLogger() );
+//        boolean foundPom = false;
+//
+//        if ( StringUtils.isEmpty( releaseDescriptor.getScmRelativePathProjectDirectory() ) )
+//        {
+//            foundPom = pomFinder.parsePom( pomFile );
+//        }
+
+//        File workDirectory = new File(releaseDescriptor.getWorkingDirectory()); //pomFile.getParentFile();
+        File workDirectory = reactorProject.getBasedir();
+        try {
+            System.out.println("workDirectory=" + workDirectory.getCanonicalPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        File pomFile = reactorProject.getFile();
+        try {
+            System.out.println("pomFile=" +  pomFile.getCanonicalPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+//        if ( foundPom )
+//        {
+//            File matchingPom = pomFinder.findMatchingPom( workDirectory );
+//            if ( matchingPom != null )
+//            {
+//                getLogger().info( "Invoking perform goals in directory " + matchingPom.getParent() );
+//                // The directory of the POM in a flat project layout is not
+//                // the same directory as the SCM checkout directory!
+//                // The same is true for a sparse checkout in e.g. GIT
+//                // the project to build could be in target/checkout/some/dir/
+//                workDirectory = matchingPom.getParentFile();
+//            }
+//        }
+
+        return execute( releaseDescriptor, releaseEnvironment, workDirectory, additionalArguments );
+    }
+
+    @Override
+    public ReleaseResult simulate( ReleaseDescriptor releaseDescriptor, ReleaseEnvironment releaseEnvironment,
+                                   List<MavenProject> reactorProjects )
+            throws ReleaseExecutionException
+    {
+        reactorProjects.forEach( mavenProject -> {
+            try {
+                System.out.printf("mavenProject: %s%n", mavenProject.getBasedir().getCanonicalPath());
+                runLogic( releaseDescriptor, releaseEnvironment, mavenProject, true );
+            } catch (IOException | ReleaseExecutionException e) {
+                e.printStackTrace();
+            }
+        });
+        return null;    }
+
+    @Override
+    public ReleaseResult execute( ReleaseDescriptor releaseDescriptor, ReleaseEnvironment releaseEnvironment,
+                                  File workingDirectory, String additionalArguments )
+            throws ReleaseExecutionException
+    {
+        ReleaseResult result = new ReleaseResult();
+
+        try
+        {
+            String goals = getGoals( releaseDescriptor );
+            if ( !StringUtils.isEmpty( goals ) )
+            {
+                logInfo( result, "Executing goals '" + goals + "'..." );
+
+                MavenExecutor mavenExecutor = mavenExecutors.get( releaseEnvironment.getMavenExecutorId() );
+
+                if ( mavenExecutor == null )
+                {
+                    throw new ReleaseExecutionException(
+                            "Cannot find Maven executor with id: " + releaseEnvironment.getMavenExecutorId() );
+                }
+
+                File executionRoot;
+                String pomFileName;
+                if ( releaseDescriptor.getPomFileName() != null )
+                {
+                    File rootPom = new File( workingDirectory.getParent(), releaseDescriptor.getPomFileName() );
+                    executionRoot = workingDirectory;
+                    pomFileName = rootPom.getName();
+                }
+                else
+                {
+                    executionRoot = workingDirectory;
+                    pomFileName = null;
+                }
+                try {
+                    System.out.println("workingDirectory=" + workingDirectory.getCanonicalPath());
+                    System.out.println("pomFileName=" + pomFileName);
+                    System.out.println("executionRoot=" + executionRoot.getCanonicalPath());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                mavenExecutor.executeGoals( executionRoot, goals, releaseEnvironment,
+                        releaseDescriptor.isInteractive(), additionalArguments,
+                        pomFileName, result );
+            }
+        }
+        catch ( MavenExecutorException e )
+        {
+            throw new ReleaseExecutionException( e.getMessage(), e );
+        }
+
+        result.setResultCode( ReleaseResult.SUCCESS );
+
+        return result;
+    }
+
+}
