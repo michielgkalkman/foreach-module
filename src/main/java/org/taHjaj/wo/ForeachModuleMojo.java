@@ -20,11 +20,13 @@ import org.apache.maven.artifact.ArtifactUtils;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.*;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.settings.Settings;
-import org.apache.maven.shared.release.*;
+import org.apache.maven.shared.release.ReleaseExecutionException;
 import org.apache.maven.shared.release.config.ReleaseDescriptorBuilder;
 import org.apache.maven.shared.release.config.ReleaseUtils;
 import org.apache.maven.shared.release.env.DefaultReleaseEnvironment;
@@ -33,7 +35,6 @@ import org.codehaus.plexus.util.StringUtils;
 import org.sonatype.plexus.components.cipher.PlexusCipherException;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,7 +44,7 @@ import java.util.List;
  * Goal which executes goals only on modules, not on aggregator poms.
  */
 @Mojo(name = "foreach", aggregator = true, requiresDependencyResolution = ResolutionScope.COMPILE, defaultPhase = LifecyclePhase.VERIFY, threadSafe = true)
-public class ForeachModuleMojo
+public final class ForeachModuleMojo
     extends AbstractMojo
 {
     /**
@@ -124,25 +125,17 @@ public class ForeachModuleMojo
     /**
      * @since 2.0
      */
-    @Parameter( defaultValue = "${session}", readonly = true, required = true )
-    protected MavenSession session;
+    @Parameter(defaultValue = "${session}", readonly = true, required = true)
+    private MavenSession session;
 
     /**
      * Additional arguments to pass to the Maven executions, separated by spaces.
      */
-    @Parameter( alias = "prepareVerifyArgs", property = "arguments" )
+    @Parameter( property = "arguments" )
     private String arguments;
 
     public void execute()
-        throws MojoExecutionException, MojoFailureException {
-        reactorProjects.forEach( mavenProject -> {
-            try {
-                System.out.printf("mavenProject: %s%n", mavenProject.getBasedir().getCanonicalPath());
-                getLog().info(String.format("mavenProject: %s%n", mavenProject.getBasedir().getCanonicalPath()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+        throws MojoExecutionException {
 
         // goals may be splitted into multiple line in configuration.
         // Let's build a single line command
@@ -158,13 +151,6 @@ public class ForeachModuleMojo
 
             createGoals();
             releaseDescriptor.setPerformGoals( goals );
-
-//            ReleasePerformRequest performRequest  = new ReleasePerformRequest();
-//            performRequest.setReleaseDescriptorBuilder( releaseDescriptor );
-//            performRequest.setReleaseEnvironment( getReleaseEnvironment() );
-//            performRequest.setReactorProjects( getReactorProjects() );
-//            performRequest.setReleaseManagerListener( new DefaultReleaseManagerListener( getLog(), false ) );
-//            performRequest.setDryRun( false );
 
             new GoalsRunner(getLog()).execute(ReleaseUtils.buildReleaseDescriptor(releaseDescriptor), getReleaseEnvironment(),
                     getReactorProjects());
@@ -198,15 +184,8 @@ public class ForeachModuleMojo
     {
         ReleaseDescriptorBuilder descriptor = new ReleaseDescriptorBuilder();
 
-        Path workingDirectory;
-        try
-        {
-            workingDirectory = getCommonBasedir( reactorProjects );
-        }
-        catch ( IOException e )
-        {
-            throw new RuntimeException( e.getMessage() );
-        }
+        Path workingDirectory = getCommonBasedir( reactorProjects );
+
         descriptor.setWorkingDirectory( workingDirectory.toFile().getAbsolutePath() );
 
         Path rootBasedir = basedir.toPath();
@@ -248,7 +227,6 @@ public class ForeachModuleMojo
     }
 
     static Path getCommonBasedir( List<MavenProject> reactorProjects )
-            throws IOException
     {
         Path basePath = reactorProjects.get( 0 ).getBasedir().toPath();
 

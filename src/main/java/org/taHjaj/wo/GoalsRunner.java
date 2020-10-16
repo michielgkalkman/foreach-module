@@ -40,7 +40,8 @@ public class GoalsRunner
                                  List<MavenProject> reactorProjects )
             throws ReleaseExecutionException
     {
-        getLogger().info( String.format( "mavenexecutorid: %s%n", releaseEnvironment.getMavenExecutorId()));
+        final String mavenExecutorId = releaseEnvironment.getMavenExecutorId();
+        getLogger().info( String.format( "mavenexecutorid: %s%n", mavenExecutorId));
 
         reactorProjects.forEach( mavenProject -> {
             try {
@@ -70,9 +71,12 @@ public class GoalsRunner
                                     MavenProject reactorProject, boolean simulate )
             throws ReleaseExecutionException
     {
+        String pomFileName = releaseDescriptor.getPomFileName();
+        final boolean useReleaseProfile = releaseDescriptor.isUseReleaseProfile();
+
         String additionalArguments = getAdditionalArguments( releaseDescriptor );
 
-        if ( releaseDescriptor.isUseReleaseProfile() )
+        if (useReleaseProfile)
         {
             if ( !StringUtils.isEmpty( additionalArguments ) )
             {
@@ -84,7 +88,6 @@ public class GoalsRunner
             }
         }
 
-        String pomFileName = releaseDescriptor.getPomFileName();
         if ( pomFileName == null )
         {
             pomFileName = "pom.xml";
@@ -135,28 +138,31 @@ public class GoalsRunner
                                   File workingDirectory, String additionalArguments )
             throws ReleaseExecutionException
     {
+        final String pomFileName1 = releaseDescriptor.getPomFileName();
+        final String mavenExecutorId = releaseEnvironment.getMavenExecutorId();
+        final String goals = releaseDescriptor.getPerformGoals();
+
         ReleaseResult result = new ReleaseResult();
 
         try
         {
-            String goals = getGoals( releaseDescriptor );
             if ( !StringUtils.isEmpty( goals ) )
             {
                 logInfo( result, "Executing goals '" + goals + "'..." );
 
-                MavenExecutor mavenExecutor = mavenExecutors.get( releaseEnvironment.getMavenExecutorId() );
+                MavenExecutor mavenExecutor = mavenExecutors.get(mavenExecutorId);
 
                 if ( mavenExecutor == null )
                 {
                     throw new ReleaseExecutionException(
-                            "Cannot find Maven executor with id: " + releaseEnvironment.getMavenExecutorId() );
+                            "Cannot find Maven executor with id: " + mavenExecutorId);
                 }
 
                 File executionRoot;
                 String pomFileName;
-                if ( releaseDescriptor.getPomFileName() != null )
+                if ( pomFileName1 != null )
                 {
-                    File rootPom = new File( workingDirectory.getParent(), releaseDescriptor.getPomFileName() );
+                    File rootPom = new File( workingDirectory.getParent(), pomFileName1);
                     executionRoot = workingDirectory;
                     pomFileName = rootPom.getName();
                 }
@@ -164,13 +170,6 @@ public class GoalsRunner
                 {
                     executionRoot = workingDirectory;
                     pomFileName = null;
-                }
-                try {
-                    System.out.println("workingDirectory=" + workingDirectory.getCanonicalPath());
-                    System.out.println("pomFileName=" + pomFileName);
-                    System.out.println("executionRoot=" + executionRoot.getCanonicalPath());
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
                 mavenExecutor.executeGoals( executionRoot, goals, releaseEnvironment,
                         releaseDescriptor.isInteractive(), additionalArguments,
