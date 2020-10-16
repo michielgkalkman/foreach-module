@@ -112,44 +112,7 @@ public class GoalsRunner
             return result;
         }
 
-
-//        PomFinder pomFinder = new PomFinder( getLogger() );
-//        boolean foundPom = false;
-//
-//        if ( StringUtils.isEmpty( releaseDescriptor.getScmRelativePathProjectDirectory() ) )
-//        {
-//            foundPom = pomFinder.parsePom( pomFile );
-//        }
-
-//        File workDirectory = new File(releaseDescriptor.getWorkingDirectory()); //pomFile.getParentFile();
-        File workDirectory = reactorProject.getBasedir();
-        try {
-            System.out.println("workDirectory=" + workDirectory.getCanonicalPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        File pomFile = reactorProject.getFile();
-        try {
-            System.out.println("pomFile=" +  pomFile.getCanonicalPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-//        if ( foundPom )
-//        {
-//            File matchingPom = pomFinder.findMatchingPom( workDirectory );
-//            if ( matchingPom != null )
-//            {
-//                getLogger().info( "Invoking perform goals in directory " + matchingPom.getParent() );
-//                // The directory of the POM in a flat project layout is not
-//                // the same directory as the SCM checkout directory!
-//                // The same is true for a sparse checkout in e.g. GIT
-//                // the project to build could be in target/checkout/some/dir/
-//                workDirectory = matchingPom.getParentFile();
-//            }
-//        }
-
-        return execute( releaseDescriptor, releaseEnvironment, workDirectory, additionalArguments );
+        return execute( releaseDescriptor, releaseEnvironment, reactorProject.getBasedir(), additionalArguments );
     }
 
     @Override
@@ -223,5 +186,4 @@ public class GoalsRunner
 
         return result;
     }
-
 }

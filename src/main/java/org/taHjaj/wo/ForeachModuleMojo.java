@@ -40,11 +40,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Goal which touches a timestamp file.
- *
- * @goal touch
- * 
- * @phase process-sources
+ * Goal which executes goals only on modules, not on aggregator poms.
  */
 @Mojo(name = "foreach", aggregator = true, requiresDependencyResolution = ResolutionScope.COMPILE, defaultPhase = LifecyclePhase.VERIFY, threadSafe = true)
 public class ForeachModuleMojo
@@ -137,11 +133,6 @@ public class ForeachModuleMojo
     @Parameter( alias = "prepareVerifyArgs", property = "arguments" )
     private String arguments;
 
-    /**
-     */
-    @Component
-    protected ReleaseManager releaseManager;
-
     public void execute()
         throws MojoExecutionException, MojoFailureException {
         reactorProjects.forEach( mavenProject -> {
@@ -168,12 +159,12 @@ public class ForeachModuleMojo
             createGoals();
             releaseDescriptor.setPerformGoals( goals );
 
-            ReleasePerformRequest performRequest  = new ReleasePerformRequest();
-            performRequest.setReleaseDescriptorBuilder( releaseDescriptor );
-            performRequest.setReleaseEnvironment( getReleaseEnvironment() );
-            performRequest.setReactorProjects( getReactorProjects() );
-            performRequest.setReleaseManagerListener( new DefaultReleaseManagerListener( getLog(), false ) );
-            performRequest.setDryRun( false );
+//            ReleasePerformRequest performRequest  = new ReleasePerformRequest();
+//            performRequest.setReleaseDescriptorBuilder( releaseDescriptor );
+//            performRequest.setReleaseEnvironment( getReleaseEnvironment() );
+//            performRequest.setReactorProjects( getReactorProjects() );
+//            performRequest.setReleaseManagerListener( new DefaultReleaseManagerListener( getLog(), false ) );
+//            performRequest.setDryRun( false );
 
             new GoalsRunner(getLog()).execute(ReleaseUtils.buildReleaseDescriptor(releaseDescriptor), getReleaseEnvironment(),
                     getReactorProjects());
