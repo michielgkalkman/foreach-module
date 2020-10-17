@@ -20,6 +20,7 @@ package org.taHjaj.wo.foreach;
  */
 
 import org.apache.maven.project.MavenProject;
+import org.taHjaj.wo.foreach.descriptor.ForeachDescriptor;
 import org.taHjaj.wo.foreach.env.ForeachEnvironment;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package org.taHjaj.wo.foreach;
+package org.taHjaj.wo.foreach.descriptor.impl;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -18,6 +18,8 @@ package org.taHjaj.wo.foreach;
  * specific language governing permissions and limitations
  * under the License.
  */
+
+import org.taHjaj.wo.foreach.descriptor.ForeachDescriptor;
 
 import java.util.List;
 
@@ -261,7 +263,7 @@ public class ForeachDescriptorBuilder
         return this;
     }
 
-    BuilderForeachDescriptor build()
+    public BuilderForeachDescriptor build()
     {
         return releaseDescriptor;
     }

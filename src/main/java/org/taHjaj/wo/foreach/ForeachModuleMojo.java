@@ -27,6 +27,7 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.settings.Settings;
 import org.codehaus.plexus.util.StringUtils;
 import org.sonatype.plexus.components.cipher.PlexusCipherException;
+import org.taHjaj.wo.foreach.descriptor.impl.ForeachDescriptorBuilder;
 import org.taHjaj.wo.foreach.env.ForeachEnvironment;
 import org.taHjaj.wo.foreach.env.impl.DefaultForeachEnvironment;
 
