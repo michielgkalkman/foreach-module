@@ -25,13 +25,13 @@ public class GoalsRunner
     }
 
     @Override
-    protected String getGoals( ReleaseDescriptor releaseDescriptor )
+    protected String getGoals( ForeachDescriptor releaseDescriptor )
     {
         return releaseDescriptor.getGoals();
     }
 
     @Override
-    public ReleaseResult execute(ReleaseDescriptor releaseDescriptor, ReleaseEnvironment releaseEnvironment,
+    public ReleaseResult execute(ForeachDescriptor releaseDescriptor, ReleaseEnvironment releaseEnvironment,
                                  List<MavenProject> reactorProjects )
     {
         final String mavenExecutorId = releaseEnvironment.getMavenExecutorId();
@@ -55,8 +55,8 @@ public class GoalsRunner
         return null;
     }
 
-    private ReleaseResult runLogic( ReleaseDescriptor releaseDescriptor, ReleaseEnvironment releaseEnvironment,
-                                    MavenProject reactorProject, boolean simulate )
+    private ReleaseResult runLogic(ForeachDescriptor releaseDescriptor, ReleaseEnvironment releaseEnvironment,
+                                   MavenProject reactorProject, boolean simulate )
             throws ReleaseExecutionException
     {
         String pomFileName = releaseDescriptor.getPomFileName();
@@ -93,8 +93,8 @@ public class GoalsRunner
     }
 
     @Override
-    public ReleaseResult simulate( ReleaseDescriptor releaseDescriptor, ReleaseEnvironment releaseEnvironment,
-                                   List<MavenProject> reactorProjects ) {
+    public ReleaseResult simulate(ForeachDescriptor releaseDescriptor, ReleaseEnvironment releaseEnvironment,
+                                  List<MavenProject> reactorProjects ) {
         reactorProjects.forEach( mavenProject -> {
             try {
                 System.out.printf("mavenProject: %s%n", mavenProject.getBasedir().getCanonicalPath());
@@ -106,8 +106,8 @@ public class GoalsRunner
         return null;    }
 
     @Override
-    public ReleaseResult execute( ReleaseDescriptor releaseDescriptor, ReleaseEnvironment releaseEnvironment,
-                                  File workingDirectory, String additionalArguments )
+    public ReleaseResult execute(ForeachDescriptor releaseDescriptor, ReleaseEnvironment releaseEnvironment,
+                                 File workingDirectory, String additionalArguments )
             throws ReleaseExecutionException
     {
         final String pomFileName1 = releaseDescriptor.getPomFileName();

@@ -130,7 +130,7 @@ public final class ForeachModuleMojo
         try
         {
             // Note that the working directory here is not the same as in the release configuration, so don't reuse that
-            ReleaseDescriptorBuilder releaseDescriptor = createReleaseDescriptor();
+            ForeachDescriptorBuilder releaseDescriptor = createReleaseDescriptor();
 
             releaseDescriptor.setGoals( goals );
 
@@ -162,9 +162,9 @@ public final class ForeachModuleMojo
      *
      * @return The release descriptor, never <code>null</code>.
      */
-    protected ReleaseDescriptorBuilder createReleaseDescriptor()
+    protected ForeachDescriptorBuilder createReleaseDescriptor()
     {
-        ReleaseDescriptorBuilder descriptor = new ReleaseDescriptorBuilder();
+        ForeachDescriptorBuilder descriptor = new ForeachDescriptorBuilder();
 
         Path workingDirectory = getCommonBasedir( reactorProjects );
 

@@ -26,7 +26,7 @@ import java.util.List;
  * @author Robert Scholte
  * @since 3.0.0
  */
-public class ReleaseDescriptorBuilder
+public class ForeachDescriptorBuilder
 {
     /**
      * Hides inner logic of the release descriptor
@@ -34,7 +34,7 @@ public class ReleaseDescriptorBuilder
      * @author Robert Scholte
      *
      */
-    public static final class BuilderReleaseDescriptor implements ReleaseDescriptor
+    public static final class BuilderForeachDescriptor implements ForeachDescriptor
     {
 
         /**
@@ -83,7 +83,7 @@ public class ReleaseDescriptorBuilder
          */
         private java.util.List<String> activateProfiles;
 
-        private BuilderReleaseDescriptor()
+        private BuilderForeachDescriptor()
         {
         }
 
@@ -222,46 +222,46 @@ public class ReleaseDescriptorBuilder
     }
 
 
-    private final BuilderReleaseDescriptor releaseDescriptor;
+    private final BuilderForeachDescriptor releaseDescriptor;
     
-    public ReleaseDescriptorBuilder()
+    public ForeachDescriptorBuilder()
     {
-        this.releaseDescriptor = new BuilderReleaseDescriptor();
+        this.releaseDescriptor = new BuilderForeachDescriptor();
     }
 
 
 
-    public ReleaseDescriptorBuilder setAdditionalArguments( String additionalArguments )
+    public ForeachDescriptorBuilder setAdditionalArguments(String additionalArguments )
     {
         releaseDescriptor.setAdditionalArguments( additionalArguments );
         return this;
     }
 
-    public ReleaseDescriptorBuilder setPomFileName( String pomFileName )
+    public ForeachDescriptorBuilder setPomFileName(String pomFileName )
     {
         releaseDescriptor.setPomFileName( pomFileName );
         return this;
     }
 
-    public ReleaseDescriptorBuilder setGoals( String performGoals )
+    public ForeachDescriptorBuilder setGoals(String performGoals )
     {
         releaseDescriptor.setGoals( performGoals );
         return this;
     }
 
-    public ReleaseDescriptorBuilder setWorkingDirectory( String workingDirectory )
+    public ForeachDescriptorBuilder setWorkingDirectory(String workingDirectory )
     {
         releaseDescriptor.setWorkingDirectory( workingDirectory );
         return this;
     }
 
-    public ReleaseDescriptorBuilder setActivateProfiles( List<String> profiles )
+    public ForeachDescriptorBuilder setActivateProfiles(List<String> profiles )
     {
         releaseDescriptor.setActivateProfiles( profiles );
         return this;
     }
 
-    BuilderReleaseDescriptor build()
+    BuilderForeachDescriptor build()
     {
         return releaseDescriptor;
     }

@@ -39,8 +39,8 @@ public abstract class AbstractRunGoalsPhase
     @Requirement( role = MavenExecutor.class )
     private Map<String, MavenExecutor> mavenExecutors;
 
-    public ReleaseResult execute( ReleaseDescriptor releaseDescriptor, ReleaseEnvironment releaseEnvironment,
-                                  File workingDirectory, String additionalArguments )
+    public ReleaseResult execute(ForeachDescriptor releaseDescriptor, ReleaseEnvironment releaseEnvironment,
+                                 File workingDirectory, String additionalArguments )
         throws ReleaseExecutionException
     {
         ReleaseResult result = new ReleaseResult();
@@ -95,9 +95,9 @@ public abstract class AbstractRunGoalsPhase
         return result;
     }
 
-    protected abstract String getGoals( ReleaseDescriptor releaseDescriptor );
+    protected abstract String getGoals( ForeachDescriptor releaseDescriptor );
 
-    protected String getAdditionalArguments( ReleaseDescriptor releaseDescriptor )
+    protected String getAdditionalArguments( ForeachDescriptor releaseDescriptor )
     {
         StringBuilder builder = new StringBuilder();
 

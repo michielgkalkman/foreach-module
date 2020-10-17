@@ -40,8 +40,8 @@ public interface ReleasePhase
      * @throws ReleaseFailureException   a failure during the execution of the phase
      * @return the release result
      */
-    ReleaseResult execute( ReleaseDescriptor releaseDescriptor, ReleaseEnvironment releaseEnvironment,
-                           List<MavenProject> reactorProjects )
+    ReleaseResult execute(ForeachDescriptor releaseDescriptor, ReleaseEnvironment releaseEnvironment,
+                          List<MavenProject> reactorProjects )
         throws ReleaseExecutionException, ReleaseFailureException;
 
     /**
@@ -54,8 +54,8 @@ public interface ReleasePhase
      * @throws ReleaseFailureException   a failure during the execution of the phase
      * @return the release result
      */
-    ReleaseResult simulate( ReleaseDescriptor releaseDescriptor, ReleaseEnvironment releaseEnvironment,
-                            List<MavenProject> reactorProjects )
+    ReleaseResult simulate(ForeachDescriptor releaseDescriptor, ReleaseEnvironment releaseEnvironment,
+                           List<MavenProject> reactorProjects )
         throws ReleaseExecutionException, ReleaseFailureException;
 
 }

@@ -25,7 +25,7 @@ import java.util.List;
  *
  * @author Robert Scholte
  */
-public interface ReleaseDescriptor  {
+public interface ForeachDescriptor {
     /**
      * Get the file name of the POM to pass to any executed Maven process.
      *
