@@ -1,4 +1,4 @@
-package org.taHjaj.wo.foreach;
+package org.taHjaj.wo.foreach.phase;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -20,51 +20,52 @@ package org.taHjaj.wo.foreach;
  */
 
 import org.codehaus.plexus.logging.AbstractLogEnabled;
+import org.taHjaj.wo.foreach.ForeachResult;
 
 /**
  * Base class for all phases.
  *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  */
-public abstract class AbstractReleasePhase
+public abstract class AbstractForeachPhase
     extends AbstractLogEnabled
-    implements ReleasePhase
+    implements ForeachPhase
 {
-    protected void logInfo( ReleaseResult result, String message )
+    protected void logInfo(ForeachResult result, String message )
     {
         result.appendInfo( message );
         getLogger().info( message );
     }
 
-    protected void logWarn( ReleaseResult result, String message )
+    protected void logWarn(ForeachResult result, String message )
     {
         result.appendWarn( message );
         getLogger().warn( message );
     }
 
-    protected void logError( ReleaseResult result, String message )
+    protected void logError(ForeachResult result, String message )
     {
         result.appendWarn( message );
         getLogger().error( message );
     }
 
-    protected void logDebug( ReleaseResult result, String message )
+    protected void logDebug(ForeachResult result, String message )
     {
         result.appendDebug( message );
         getLogger().debug( message );
     }
 
-    protected void logDebug( ReleaseResult result, String message, Exception e )
+    protected void logDebug(ForeachResult result, String message, Exception e )
     {
         result.appendDebug( message, e );
         getLogger().debug( message, e );
     }
 
-    protected ReleaseResult getReleaseResultSuccess()
+    protected ForeachResult getReleaseResultSuccess()
     {
-        ReleaseResult result = new ReleaseResult();
+        ForeachResult result = new ForeachResult();
 
-        result.setResultCode( ReleaseResult.SUCCESS );
+        result.setResultCode( ForeachResult.SUCCESS );
 
         return result;
     }

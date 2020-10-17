@@ -19,8 +19,8 @@ package org.taHjaj.wo.foreach.exec;
  * under the License.
  */
 
-import org.taHjaj.wo.foreach.MavenExecutorException;
-import org.taHjaj.wo.foreach.ReleaseResult;
+import org.taHjaj.wo.foreach.exceptions.MavenExecutorException;
+import org.taHjaj.wo.foreach.ForeachResult;
 import org.taHjaj.wo.foreach.env.ForeachEnvironment;
 
 import java.io.File;
@@ -46,6 +46,6 @@ public interface MavenExecutor
      */
     void executeGoals(File workingDirectory, String goals, ForeachEnvironment releaseEnvironment,
                       boolean interactive, String additionalArguments, String pomFileName,
-                      ReleaseResult result)
+                      ForeachResult result)
         throws MavenExecutorException;
 }

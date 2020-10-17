@@ -1,4 +1,4 @@
-package org.taHjaj.wo.foreach;
+package org.taHjaj.wo.foreach.exceptions;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -20,15 +20,20 @@ package org.taHjaj.wo.foreach;
  */
 
 /**
- * A failure during the release process.
+ * Exception occuring during release execution.
  *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  */
-public class ReleaseFailureException
+public class ForeachExecutionException
     extends Exception
 {
-    public ReleaseFailureException(String message )
+    public ForeachExecutionException(String message )
     {
         super( message );
+    }
+
+    public ForeachExecutionException(String message, Throwable t )
+    {
+        super( message, t );
     }
 }

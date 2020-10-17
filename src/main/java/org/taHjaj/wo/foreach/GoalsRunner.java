@@ -6,8 +6,11 @@ import org.codehaus.plexus.util.StringUtils;
 import org.sonatype.plexus.components.cipher.PlexusCipherException;
 import org.taHjaj.wo.foreach.descriptor.ForeachDescriptor;
 import org.taHjaj.wo.foreach.env.ForeachEnvironment;
+import org.taHjaj.wo.foreach.exceptions.ForeachExecutionException;
+import org.taHjaj.wo.foreach.exceptions.MavenExecutorException;
 import org.taHjaj.wo.foreach.exec.MavenExecutor;
 import org.taHjaj.wo.foreach.exec.impl.invoker.InvokerMavenExecutor;
+import org.taHjaj.wo.foreach.phase.AbstractRunGoalsPhase;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,7 +38,7 @@ public class GoalsRunner
     }
 
     @Override
-    public ReleaseResult execute(ForeachDescriptor releaseDescriptor, ForeachEnvironment releaseEnvironment,
+    public ForeachResult execute(ForeachDescriptor releaseDescriptor, ForeachEnvironment releaseEnvironment,
                                  List<MavenProject> reactorProjects )
     {
         final String mavenExecutorId = releaseEnvironment.getMavenExecutorId();
@@ -52,16 +55,16 @@ public class GoalsRunner
                     getLogger().info(  String.format( "Project %s has no modules - executing goald%n", mavenProject.getBasedir().getCanonicalPath()));
                     runLogic(releaseDescriptor, releaseEnvironment, mavenProject, false);
                 }
-            } catch (IOException | ReleaseExecutionException e) {
+            } catch (IOException | ForeachExecutionException e) {
                 e.printStackTrace();
             }
         });
         return null;
     }
 
-    private ReleaseResult runLogic(ForeachDescriptor releaseDescriptor, ForeachEnvironment releaseEnvironment,
+    private ForeachResult runLogic(ForeachDescriptor releaseDescriptor, ForeachEnvironment releaseEnvironment,
                                    MavenProject reactorProject, boolean simulate )
-            throws ReleaseExecutionException
+            throws ForeachExecutionException
     {
         String pomFileName = releaseDescriptor.getPomFileName();
         String additionalArguments = getAdditionalArguments( releaseDescriptor );
@@ -84,7 +87,7 @@ public class GoalsRunner
 
         if ( simulate )
         {
-            ReleaseResult result = new ReleaseResult();
+            ForeachResult result = new ForeachResult();
 
             logDebug( result, "Additional arguments: " + additionalArguments );
 
@@ -97,28 +100,28 @@ public class GoalsRunner
     }
 
     @Override
-    public ReleaseResult simulate(ForeachDescriptor releaseDescriptor, ForeachEnvironment releaseEnvironment,
+    public ForeachResult simulate(ForeachDescriptor releaseDescriptor, ForeachEnvironment releaseEnvironment,
                                   List<MavenProject> reactorProjects ) {
         reactorProjects.forEach( mavenProject -> {
             try {
                 System.out.printf("mavenProject: %s%n", mavenProject.getBasedir().getCanonicalPath());
                 runLogic( releaseDescriptor, releaseEnvironment, mavenProject, true );
-            } catch (IOException | ReleaseExecutionException e) {
+            } catch (IOException | ForeachExecutionException e) {
                 e.printStackTrace();
             }
         });
         return null;    }
 
     @Override
-    public ReleaseResult execute(ForeachDescriptor releaseDescriptor, ForeachEnvironment releaseEnvironment,
+    public ForeachResult execute(ForeachDescriptor releaseDescriptor, ForeachEnvironment releaseEnvironment,
                                  File workingDirectory, String additionalArguments )
-            throws ReleaseExecutionException
+            throws ForeachExecutionException
     {
         final String pomFileName1 = releaseDescriptor.getPomFileName();
         final String mavenExecutorId = releaseEnvironment.getMavenExecutorId();
         final String goals = releaseDescriptor.getGoals();
 
-        ReleaseResult result = new ReleaseResult();
+        ForeachResult result = new ForeachResult();
 
         try
         {
@@ -130,7 +133,7 @@ public class GoalsRunner
 
                 if ( mavenExecutor == null )
                 {
-                    throw new ReleaseExecutionException(
+                    throw new ForeachExecutionException(
                             "Cannot find Maven executor with id: " + mavenExecutorId);
                 }
 
@@ -154,10 +157,10 @@ public class GoalsRunner
         }
         catch ( MavenExecutorException e )
         {
-            throw new ReleaseExecutionException( e.getMessage(), e );
+            throw new ForeachExecutionException( e.getMessage(), e );
         }
 
-        result.setResultCode( ReleaseResult.SUCCESS );
+        result.setResultCode( ForeachResult.SUCCESS );
 
         return result;
     }

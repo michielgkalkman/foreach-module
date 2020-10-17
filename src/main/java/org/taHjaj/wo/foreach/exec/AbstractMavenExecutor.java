@@ -34,10 +34,9 @@ import org.sonatype.plexus.components.sec.dispatcher.DefaultSecDispatcher;
 import org.sonatype.plexus.components.sec.dispatcher.SecDispatcherException;
 import org.sonatype.plexus.components.sec.dispatcher.SecUtil;
 import org.sonatype.plexus.components.sec.dispatcher.model.SettingsSecurity;
-import org.taHjaj.wo.foreach.MavenExecutorException;
-import org.taHjaj.wo.foreach.ReleaseResult;
+import org.taHjaj.wo.foreach.exceptions.MavenExecutorException;
+import org.taHjaj.wo.foreach.ForeachResult;
 import org.taHjaj.wo.foreach.env.ForeachEnvironment;
-import org.taHjaj.wo.foreach.exec.MavenExecutor;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -68,7 +67,7 @@ public abstract class AbstractMavenExecutor
     @Override
     public void executeGoals( File workingDirectory, String goals, ForeachEnvironment releaseEnvironment,
                               boolean interactive, String additionalArguments, String pomFileName,
-                              ReleaseResult result )
+                              ForeachResult result )
         throws MavenExecutorException
     {
         List<String> goalsList = new ArrayList<>();
@@ -89,7 +88,7 @@ public abstract class AbstractMavenExecutor
     protected abstract void executeGoals(File workingDirectory, List<String> goals,
                                          ForeachEnvironment releaseEnvironment, boolean interactive,
                                          String additionalArguments, String pomFileName,
-                                         ReleaseResult releaseResult)
+                                         ForeachResult releaseResult)
         throws MavenExecutorException, MavenExecutorException;
 
     protected final Logger getLogger()

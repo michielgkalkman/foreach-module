@@ -1,4 +1,4 @@
-package org.taHjaj.wo.foreach;
+package org.taHjaj.wo.foreach.phase;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -20,6 +20,9 @@ package org.taHjaj.wo.foreach;
  */
 
 import org.apache.maven.project.MavenProject;
+import org.taHjaj.wo.foreach.exceptions.ForeachExecutionException;
+import org.taHjaj.wo.foreach.exceptions.ForeachFailureException;
+import org.taHjaj.wo.foreach.ForeachResult;
 import org.taHjaj.wo.foreach.descriptor.ForeachDescriptor;
 import org.taHjaj.wo.foreach.env.ForeachEnvironment;
 
@@ -30,7 +33,7 @@ import java.util.List;
  *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  */
-public interface ReleasePhase
+public interface ForeachPhase
 {
     /**
      * Execute the phase.
@@ -38,13 +41,13 @@ public interface ReleasePhase
      * @param releaseDescriptor the configuration to use
      * @param releaseEnvironment the environmental configuration, such as Maven settings, Maven home, etc.
      * @param reactorProjects   the reactor projects
-     * @throws ReleaseExecutionException an exception during the execution of the phase
-     * @throws ReleaseFailureException   a failure during the execution of the phase
+     * @throws ForeachExecutionException an exception during the execution of the phase
+     * @throws ForeachFailureException   a failure during the execution of the phase
      * @return the release result
      */
-    ReleaseResult execute(ForeachDescriptor releaseDescriptor, ForeachEnvironment releaseEnvironment,
+    ForeachResult execute(ForeachDescriptor releaseDescriptor, ForeachEnvironment releaseEnvironment,
                           List<MavenProject> reactorProjects )
-        throws ReleaseExecutionException, ReleaseFailureException;
+        throws ForeachExecutionException, ForeachFailureException;
 
     /**
      * Simulate the phase, but don't make any changes to the project.
@@ -52,12 +55,12 @@ public interface ReleasePhase
      * @param releaseDescriptor the configuration to use
      * @param releaseEnvironment the environmental configuration, such as Maven settings, Maven home, etc.
      * @param reactorProjects   the reactor projects
-     * @throws ReleaseExecutionException an exception during the execution of the phase
-     * @throws ReleaseFailureException   a failure during the execution of the phase
+     * @throws ForeachExecutionException an exception during the execution of the phase
+     * @throws ForeachFailureException   a failure during the execution of the phase
      * @return the release result
      */
-    ReleaseResult simulate(ForeachDescriptor releaseDescriptor, ForeachEnvironment releaseEnvironment,
+    ForeachResult simulate(ForeachDescriptor releaseDescriptor, ForeachEnvironment releaseEnvironment,
                            List<MavenProject> reactorProjects )
-        throws ReleaseExecutionException, ReleaseFailureException;
+        throws ForeachExecutionException, ForeachFailureException;
 
 }

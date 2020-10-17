@@ -1,4 +1,4 @@
-package org.taHjaj.wo.foreach;
+package org.taHjaj.wo.foreach.phase;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -21,6 +21,9 @@ package org.taHjaj.wo.foreach;
 
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.util.StringUtils;
+import org.taHjaj.wo.foreach.exceptions.ForeachExecutionException;
+import org.taHjaj.wo.foreach.exceptions.MavenExecutorException;
+import org.taHjaj.wo.foreach.ForeachResult;
 import org.taHjaj.wo.foreach.descriptor.ForeachDescriptor;
 import org.taHjaj.wo.foreach.env.ForeachEnvironment;
 import org.taHjaj.wo.foreach.exec.MavenExecutor;
@@ -34,7 +37,7 @@ import java.util.Map;
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  */
 public abstract class AbstractRunGoalsPhase
-    extends AbstractReleasePhase
+    extends AbstractForeachPhase
 {
     /**
      * Component to assist in executing Maven.
@@ -42,11 +45,11 @@ public abstract class AbstractRunGoalsPhase
     @Requirement( role = MavenExecutor.class )
     private Map<String, MavenExecutor> mavenExecutors;
 
-    public ReleaseResult execute(ForeachDescriptor releaseDescriptor, ForeachEnvironment releaseEnvironment,
+    public ForeachResult execute(ForeachDescriptor releaseDescriptor, ForeachEnvironment releaseEnvironment,
                                  File workingDirectory, String additionalArguments )
-        throws ReleaseExecutionException
+        throws ForeachExecutionException
     {
-        ReleaseResult result = new ReleaseResult();
+        ForeachResult result = new ForeachResult();
 
         try
         {
@@ -60,7 +63,7 @@ public abstract class AbstractRunGoalsPhase
 
                 if ( mavenExecutor == null )
                 {
-                    throw new ReleaseExecutionException(
+                    throw new ForeachExecutionException(
                         "Cannot find Maven executor with id: "
                             + mavenExecutorId
                             + ", options are: "
@@ -90,10 +93,10 @@ public abstract class AbstractRunGoalsPhase
         }
         catch ( MavenExecutorException e )
         {
-            throw new ReleaseExecutionException( e.getMessage(), e );
+            throw new ForeachExecutionException( e.getMessage(), e );
         }
 
-        result.setResultCode( ReleaseResult.SUCCESS );
+        result.setResultCode( ForeachResult.SUCCESS );
 
         return result;
     }

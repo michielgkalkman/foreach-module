@@ -25,7 +25,7 @@ import java.io.PrintStream;
 /**
  * @author Edwin Punzalan
  */
-public class ReleaseResult
+public class ForeachResult
 {
     public static final int UNDEFINED = -1, SUCCESS = 0, ERROR = 1;
 

@@ -29,6 +29,7 @@ import org.codehaus.plexus.util.cli.Commandline;
 import org.sonatype.plexus.components.cipher.PlexusCipherException;
 import org.taHjaj.wo.foreach.*;
 import org.taHjaj.wo.foreach.env.ForeachEnvironment;
+import org.taHjaj.wo.foreach.exceptions.MavenExecutorException;
 import org.taHjaj.wo.foreach.exec.AbstractMavenExecutor;
 import org.taHjaj.wo.foreach.exec.MavenExecutor;
 
@@ -60,7 +61,7 @@ public class ForkedMavenExecutor
     @Override
     public void executeGoals( File workingDirectory, List<String> goals, ForeachEnvironment releaseEnvironment,
                               boolean interactive, String additionalArguments, String pomFileName,
-                              ReleaseResult relResult )
+                              ForeachResult relResult )
         throws MavenExecutorException
     {
         String mavenPath = null;

@@ -20,6 +20,7 @@ package org.taHjaj.wo.foreach;
  */
 
 import org.codehaus.plexus.util.cli.Commandline;
+import org.taHjaj.wo.foreach.exceptions.MavenExecutorException;
 
 /**
  * Create a command line for execution. Componentised to allow mocking.

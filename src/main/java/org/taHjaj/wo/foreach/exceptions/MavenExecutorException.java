@@ -1,4 +1,4 @@
-package org.taHjaj.wo.foreach;
+package org.taHjaj.wo.foreach.exceptions;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -20,20 +20,29 @@ package org.taHjaj.wo.foreach;
  */
 
 /**
- * Exception occuring during release execution.
+ * Exception executing Maven.
  *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  */
-public class ReleaseExecutionException
+public class MavenExecutorException
     extends Exception
 {
-    public ReleaseExecutionException(String message )
+    private int exitCode;
+
+    public MavenExecutorException(String message, int exitCode )
     {
         super( message );
+
+        this.exitCode = exitCode;
     }
 
-    public ReleaseExecutionException(String message, Throwable t )
+    public MavenExecutorException(String message, Throwable cause )
     {
-        super( message, t );
+        super( message, cause );
+    }
+
+    public int getExitCode()
+    {
+        return exitCode;
     }
 }
