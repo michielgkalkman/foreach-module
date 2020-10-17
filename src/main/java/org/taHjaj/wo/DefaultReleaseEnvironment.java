@@ -96,9 +96,11 @@ public class DefaultReleaseEnvironment
     {
         File localRepo = localRepositoryDirectory;
 
-        if ( localRepo == null && settings != null && settings.getLocalRepository() != null )
-        {
-            localRepo = new File( settings.getLocalRepository() ).getAbsoluteFile();
+        if ( localRepo == null && settings != null) {
+            final String localRepository = settings.getLocalRepository();
+            if (localRepository != null) {
+                localRepo = new File(localRepository).getAbsoluteFile();
+            }
         }
 
         return localRepo;

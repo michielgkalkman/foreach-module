@@ -52,19 +52,25 @@ public abstract class AbstractRunGoalsPhase
             {
                 logInfo( result, "Executing goals '" + goals + "'..." );
 
-                MavenExecutor mavenExecutor = mavenExecutors.get( releaseEnvironment.getMavenExecutorId() );
+                final String mavenExecutorId = releaseEnvironment.getMavenExecutorId();
+                MavenExecutor mavenExecutor = mavenExecutors.get( mavenExecutorId);
 
                 if ( mavenExecutor == null )
                 {
                     throw new ReleaseExecutionException(
-                        "Cannot find Maven executor with id: " + releaseEnvironment.getMavenExecutorId() );
+                        "Cannot find Maven executor with id: "
+                            + mavenExecutorId
+                            + ", options are: "
+                            + mavenExecutors.keySet()
+                    );
                 }
 
                 File executionRoot;
                 String pomFileName;
-                if ( releaseDescriptor.getPomFileName() != null )
+                final String pomFileName1 = releaseDescriptor.getPomFileName();
+                if ( pomFileName1 != null )
                 {
-                    File rootPom = new File( workingDirectory, releaseDescriptor.getPomFileName() );
+                    File rootPom = new File( workingDirectory, pomFileName1);
                     executionRoot = rootPom.getParentFile();
                     pomFileName = rootPom.getName();
                 }
@@ -95,9 +101,10 @@ public abstract class AbstractRunGoalsPhase
     {
         StringBuilder builder = new StringBuilder();
 
-        if ( releaseDescriptor.getAdditionalArguments() != null )
+        final String additionalArguments = releaseDescriptor.getAdditionalArguments();
+        if ( additionalArguments != null )
         {
-            builder.append( releaseDescriptor.getAdditionalArguments() );
+            builder.append(additionalArguments);
         }
 
         return builder.length() > 0 ? builder.toString().trim() : null;

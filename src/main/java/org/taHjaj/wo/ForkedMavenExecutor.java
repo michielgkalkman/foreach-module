@@ -19,6 +19,7 @@ package org.taHjaj.wo;
  * under the License.
  */
 
+import org.apache.maven.settings.Settings;
 import org.apache.maven.settings.io.xpp3.SettingsXpp3Writer;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
@@ -60,9 +61,10 @@ public class ForkedMavenExecutor
     {
         String mavenPath = null;
         // if null we use the current one
-        if ( releaseEnvironment.getMavenHome() != null )
+        final File mavenHome = releaseEnvironment.getMavenHome();
+        if ( mavenHome != null )
         {
-            mavenPath = releaseEnvironment.getMavenHome().getAbsolutePath();
+            mavenPath = mavenHome.getAbsolutePath();
         }
         else
         {
@@ -70,7 +72,8 @@ public class ForkedMavenExecutor
         }
 
         File settingsFile = null;
-        if ( releaseEnvironment.getSettings() != null )
+        final Settings settings = releaseEnvironment.getSettings();
+        if ( settings != null )
         {
             // Have to serialize to a file as if Maven is embedded, there may not actually be a settings.xml on disk
             try
@@ -80,7 +83,7 @@ public class ForkedMavenExecutor
                 
                 try ( FileWriter fileWriter = new FileWriter( settingsFile ) )
                 {
-                    writer.write( fileWriter, encryptSettings( releaseEnvironment.getSettings() ) );
+                    writer.write( fileWriter, encryptSettings(settings) );
                 }
             }
             catch ( IOException e )
@@ -133,8 +136,9 @@ public class ForkedMavenExecutor
 
             try
             {
-                relResult.appendInfo( "Executing: " + cl.toString() );
-                getLogger().info( "Executing: " + cl.toString() );
+                final String clString = cl.toString();
+                relResult.appendInfo( "Executing: " + clString);
+                getLogger().info( "Executing: " + clString);
 
                 int result = executeCommandLine( cl, System.in, stdOut, stdErr );
 
