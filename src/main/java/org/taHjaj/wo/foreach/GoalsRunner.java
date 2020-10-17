@@ -1,4 +1,4 @@
-package org.taHjaj.wo;
+package org.taHjaj.wo.foreach;
 
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;

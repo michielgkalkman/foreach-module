@@ -1,4 +1,4 @@
-package org.taHjaj.wo;
+package org.taHjaj.wo.foreach;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one

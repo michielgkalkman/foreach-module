@@ -1,4 +1,4 @@
-package org.taHjaj.wo;
+package org.taHjaj.wo.foreach;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,22 +19,33 @@ package org.taHjaj.wo;
  * under the License.
  */
 
-import org.codehaus.plexus.util.cli.Commandline;
+import org.apache.maven.settings.Settings;
+
+import java.io.File;
+import java.util.Locale;
 
 /**
- * Create a command line for execution. Componentised to allow mocking.
  *
- * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  */
-public interface CommandLineFactory
+public interface ReleaseEnvironment
 {
+
+    String DEFAULT_MAVEN_EXECUTOR_ID = "forked-path";
+
+    String getMavenExecutorId();
+
+    File getLocalRepositoryDirectory();
+
+    Settings getSettings();
+
+    File getMavenHome();
+
+    File getJavaHome();
+
     /**
-     * Create a command line object with default environment for the given executable.
      *
-     * @param executable the executable
-     * @return the command line
-     * @throws MavenExecutorException if there was a problem creating the command line
+     * @return the locale
+     * @since 2.4
      */
-    Commandline createCommandLine( String executable )
-        throws MavenExecutorException;
+    Locale getLocale();
 }

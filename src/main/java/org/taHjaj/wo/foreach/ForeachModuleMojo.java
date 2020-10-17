@@ -1,4 +1,4 @@
-package org.taHjaj.wo;
+package org.taHjaj.wo.foreach;
 
 /*
  * Copyright 2001-2005 The Apache Software Foundation.
@@ -17,7 +17,6 @@ package org.taHjaj.wo;
  */
 
 import org.apache.maven.execution.MavenSession;
-import org.apache.maven.model.DistributionManagement;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
