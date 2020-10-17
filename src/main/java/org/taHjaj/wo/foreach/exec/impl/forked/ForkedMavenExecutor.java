@@ -28,6 +28,7 @@ import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.Commandline;
 import org.sonatype.plexus.components.cipher.PlexusCipherException;
 import org.taHjaj.wo.foreach.*;
+import org.taHjaj.wo.foreach.commandline.CommandLineFactory;
 import org.taHjaj.wo.foreach.env.ForeachEnvironment;
 import org.taHjaj.wo.foreach.exceptions.MavenExecutorException;
 import org.taHjaj.wo.foreach.exec.AbstractMavenExecutor;

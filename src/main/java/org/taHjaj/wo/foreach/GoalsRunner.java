@@ -18,6 +18,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Runs the supplied goals for each module.
+ */
 public class GoalsRunner
         extends AbstractRunGoalsPhase {
 

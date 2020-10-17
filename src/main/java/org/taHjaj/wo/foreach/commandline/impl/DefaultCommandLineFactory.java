@@ -1,4 +1,4 @@
-package org.taHjaj.wo.foreach;
+package org.taHjaj.wo.foreach.commandline.impl;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,23 +19,36 @@ package org.taHjaj.wo.foreach;
  * under the License.
  */
 
+import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.util.cli.Commandline;
+import org.taHjaj.wo.foreach.commandline.CommandLineFactory;
 import org.taHjaj.wo.foreach.exceptions.MavenExecutorException;
 
 /**
- * Create a command line for execution. Componentised to allow mocking.
+ * Create a command line instance.
  *
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  */
-public interface CommandLineFactory
+@Component( role = CommandLineFactory.class )
+public class DefaultCommandLineFactory
+    implements CommandLineFactory
 {
-    /**
-     * Create a command line object with default environment for the given executable.
-     *
-     * @param executable the executable
-     * @return the command line
-     * @throws MavenExecutorException if there was a problem creating the command line
-     */
-    Commandline createCommandLine( String executable )
-        throws MavenExecutorException;
+    @Override
+    public Commandline createCommandLine( String executable )
+        throws MavenExecutorException
+    {
+        Commandline commandline = new Commandline();
+        commandline.setExecutable( executable );
+
+        try
+        {
+            commandline.addSystemEnvironment();
+        }
+        catch ( Exception e )
+        {
+            throw new MavenExecutorException( e.getMessage(), e );
+        }
+
+        return commandline;
+    }
 }
