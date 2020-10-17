@@ -1,4 +1,4 @@
-package org.taHjaj.wo.foreach;
+package org.taHjaj.wo.foreach.exec;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -34,7 +34,10 @@ import org.sonatype.plexus.components.sec.dispatcher.DefaultSecDispatcher;
 import org.sonatype.plexus.components.sec.dispatcher.SecDispatcherException;
 import org.sonatype.plexus.components.sec.dispatcher.SecUtil;
 import org.sonatype.plexus.components.sec.dispatcher.model.SettingsSecurity;
+import org.taHjaj.wo.foreach.MavenExecutorException;
+import org.taHjaj.wo.foreach.ReleaseResult;
 import org.taHjaj.wo.foreach.env.ForeachEnvironment;
+import org.taHjaj.wo.foreach.exec.MavenExecutor;
 
 import java.io.File;
 import java.util.ArrayList;

@@ -6,6 +6,8 @@ import org.codehaus.plexus.util.StringUtils;
 import org.sonatype.plexus.components.cipher.PlexusCipherException;
 import org.taHjaj.wo.foreach.descriptor.ForeachDescriptor;
 import org.taHjaj.wo.foreach.env.ForeachEnvironment;
+import org.taHjaj.wo.foreach.exec.MavenExecutor;
+import org.taHjaj.wo.foreach.exec.impl.invoker.InvokerMavenExecutor;
 
 import java.io.File;
 import java.io.IOException;

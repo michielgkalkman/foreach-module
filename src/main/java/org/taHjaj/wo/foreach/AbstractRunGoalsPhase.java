@@ -23,6 +23,7 @@ import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.util.StringUtils;
 import org.taHjaj.wo.foreach.descriptor.ForeachDescriptor;
 import org.taHjaj.wo.foreach.env.ForeachEnvironment;
+import org.taHjaj.wo.foreach.exec.MavenExecutor;
 
 import java.io.File;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package org.taHjaj.wo.foreach;
+package org.taHjaj.wo.foreach.exec;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,6 +19,8 @@ package org.taHjaj.wo.foreach;
  * under the License.
  */
 
+import org.taHjaj.wo.foreach.MavenExecutorException;
+import org.taHjaj.wo.foreach.ReleaseResult;
 import org.taHjaj.wo.foreach.env.ForeachEnvironment;
 
 import java.io.File;

@@ -1,4 +1,4 @@
-package org.taHjaj.wo.foreach;
+package org.taHjaj.wo.foreach.exec.impl.forked;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -27,7 +27,10 @@ import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.Commandline;
 import org.sonatype.plexus.components.cipher.PlexusCipherException;
+import org.taHjaj.wo.foreach.*;
 import org.taHjaj.wo.foreach.env.ForeachEnvironment;
+import org.taHjaj.wo.foreach.exec.AbstractMavenExecutor;
+import org.taHjaj.wo.foreach.exec.MavenExecutor;
 
 import java.io.*;
 import java.util.List;

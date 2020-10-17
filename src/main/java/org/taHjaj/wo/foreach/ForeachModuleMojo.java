@@ -30,6 +30,7 @@ import org.sonatype.plexus.components.cipher.PlexusCipherException;
 import org.taHjaj.wo.foreach.descriptor.impl.ForeachDescriptorBuilder;
 import org.taHjaj.wo.foreach.env.ForeachEnvironment;
 import org.taHjaj.wo.foreach.env.impl.DefaultForeachEnvironment;
+import org.taHjaj.wo.foreach.exec.MavenExecutor;
 
 import java.io.File;
 import java.nio.file.Path;
