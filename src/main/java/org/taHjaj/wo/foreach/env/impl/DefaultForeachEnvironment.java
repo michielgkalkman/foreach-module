@@ -1,4 +1,4 @@
-package org.taHjaj.wo.foreach;
+package org.taHjaj.wo.foreach.env.impl;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -20,6 +20,7 @@ package org.taHjaj.wo.foreach;
  */
 
 import org.apache.maven.settings.Settings;
+import org.taHjaj.wo.foreach.env.ForeachEnvironment;
 
 import java.io.File;
 import java.util.Locale;
@@ -27,8 +28,8 @@ import java.util.Locale;
 /**
  *
  */
-public class DefaultReleaseEnvironment
-    implements ReleaseEnvironment
+public class DefaultForeachEnvironment
+    implements ForeachEnvironment
 {
 
     private File mavenHome;
@@ -55,13 +56,13 @@ public class DefaultReleaseEnvironment
         return settings;
     }
 
-    public DefaultReleaseEnvironment setMavenHome( File mavenHome )
+    public DefaultForeachEnvironment setMavenHome(File mavenHome )
     {
         this.mavenHome = mavenHome;
         return this;
     }
 
-    public DefaultReleaseEnvironment setSettings( Settings settings )
+    public DefaultForeachEnvironment setSettings(Settings settings )
     {
         this.settings = settings;
         return this;
@@ -73,7 +74,7 @@ public class DefaultReleaseEnvironment
         return mavenExecutorId;
     }
 
-    public DefaultReleaseEnvironment setMavenExecutorId( String mavenExecutorId )
+    public DefaultForeachEnvironment setMavenExecutorId(String mavenExecutorId )
     {
         this.mavenExecutorId = mavenExecutorId;
         return this;
@@ -85,7 +86,7 @@ public class DefaultReleaseEnvironment
         return javaHome;
     }
 
-    public DefaultReleaseEnvironment setJavaHome( File javaHome )
+    public DefaultForeachEnvironment setJavaHome(File javaHome )
     {
         this.javaHome = javaHome;
         return this;
@@ -106,7 +107,7 @@ public class DefaultReleaseEnvironment
         return localRepo;
     }
 
-    public DefaultReleaseEnvironment setLocalRepositoryDirectory( File localRepositoryDirectory )
+    public DefaultForeachEnvironment setLocalRepositoryDirectory(File localRepositoryDirectory )
     {
         this.localRepositoryDirectory = localRepositoryDirectory;
         return this;
@@ -118,7 +119,7 @@ public class DefaultReleaseEnvironment
         return locale;
     }
 
-    public DefaultReleaseEnvironment setLocale( Locale locale )
+    public DefaultForeachEnvironment setLocale(Locale locale )
     {
         this.locale = locale;
         return this;

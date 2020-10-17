@@ -20,6 +20,7 @@ package org.taHjaj.wo.foreach;
  */
 
 import org.apache.maven.project.MavenProject;
+import org.taHjaj.wo.foreach.env.ForeachEnvironment;
 
 import java.util.List;
 
@@ -40,7 +41,7 @@ public interface ReleasePhase
      * @throws ReleaseFailureException   a failure during the execution of the phase
      * @return the release result
      */
-    ReleaseResult execute(ForeachDescriptor releaseDescriptor, ReleaseEnvironment releaseEnvironment,
+    ReleaseResult execute(ForeachDescriptor releaseDescriptor, ForeachEnvironment releaseEnvironment,
                           List<MavenProject> reactorProjects )
         throws ReleaseExecutionException, ReleaseFailureException;
 
@@ -54,7 +55,7 @@ public interface ReleasePhase
      * @throws ReleaseFailureException   a failure during the execution of the phase
      * @return the release result
      */
-    ReleaseResult simulate(ForeachDescriptor releaseDescriptor, ReleaseEnvironment releaseEnvironment,
+    ReleaseResult simulate(ForeachDescriptor releaseDescriptor, ForeachEnvironment releaseEnvironment,
                            List<MavenProject> reactorProjects )
         throws ReleaseExecutionException, ReleaseFailureException;
 

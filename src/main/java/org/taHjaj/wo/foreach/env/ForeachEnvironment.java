@@ -1,4 +1,4 @@
-package org.taHjaj.wo.foreach;
+package org.taHjaj.wo.foreach.env;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -27,7 +27,7 @@ import java.util.Locale;
 /**
  *
  */
-public interface ReleaseEnvironment
+public interface ForeachEnvironment
 {
 
     String DEFAULT_MAVEN_EXECUTOR_ID = "forked-path";

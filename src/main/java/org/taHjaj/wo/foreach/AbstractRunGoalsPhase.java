@@ -21,6 +21,7 @@ package org.taHjaj.wo.foreach;
 
 import org.codehaus.plexus.component.annotations.Requirement;
 import org.codehaus.plexus.util.StringUtils;
+import org.taHjaj.wo.foreach.env.ForeachEnvironment;
 
 import java.io.File;
 import java.util.Map;
@@ -39,7 +40,7 @@ public abstract class AbstractRunGoalsPhase
     @Requirement( role = MavenExecutor.class )
     private Map<String, MavenExecutor> mavenExecutors;
 
-    public ReleaseResult execute(ForeachDescriptor releaseDescriptor, ReleaseEnvironment releaseEnvironment,
+    public ReleaseResult execute(ForeachDescriptor releaseDescriptor, ForeachEnvironment releaseEnvironment,
                                  File workingDirectory, String additionalArguments )
         throws ReleaseExecutionException
     {

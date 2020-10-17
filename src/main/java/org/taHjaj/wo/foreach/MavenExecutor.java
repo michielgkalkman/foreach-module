@@ -19,6 +19,8 @@ package org.taHjaj.wo.foreach;
  * under the License.
  */
 
+import org.taHjaj.wo.foreach.env.ForeachEnvironment;
+
 import java.io.File;
 
 /**
@@ -40,7 +42,7 @@ public interface MavenExecutor
      * @param result              holds all results of the execution
      * @throws MavenExecutorException if an error occurred executing Maven
      */
-    void executeGoals(File workingDirectory, String goals, ReleaseEnvironment releaseEnvironment,
+    void executeGoals(File workingDirectory, String goals, ForeachEnvironment releaseEnvironment,
                       boolean interactive, String additionalArguments, String pomFileName,
                       ReleaseResult result)
         throws MavenExecutorException;

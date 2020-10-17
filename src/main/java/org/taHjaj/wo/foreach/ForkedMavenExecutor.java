@@ -27,6 +27,7 @@ import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.cli.CommandLineException;
 import org.codehaus.plexus.util.cli.Commandline;
 import org.sonatype.plexus.components.cipher.PlexusCipherException;
+import org.taHjaj.wo.foreach.env.ForeachEnvironment;
 
 import java.io.*;
 import java.util.List;
@@ -54,7 +55,7 @@ public class ForkedMavenExecutor
      * @noinspection UseOfSystemOutOrSystemErr
      */
     @Override
-    public void executeGoals( File workingDirectory, List<String> goals, ReleaseEnvironment releaseEnvironment,
+    public void executeGoals( File workingDirectory, List<String> goals, ForeachEnvironment releaseEnvironment,
                               boolean interactive, String additionalArguments, String pomFileName,
                               ReleaseResult relResult )
         throws MavenExecutorException

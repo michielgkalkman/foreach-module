@@ -27,6 +27,8 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.settings.Settings;
 import org.codehaus.plexus.util.StringUtils;
 import org.sonatype.plexus.components.cipher.PlexusCipherException;
+import org.taHjaj.wo.foreach.env.ForeachEnvironment;
+import org.taHjaj.wo.foreach.env.impl.DefaultForeachEnvironment;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -148,9 +150,9 @@ public final class ForeachModuleMojo
      *
      * @return The release environment, never <code>null</code>.
      */
-    protected ReleaseEnvironment getReleaseEnvironment()
+    protected ForeachEnvironment getReleaseEnvironment()
     {
-        return new DefaultReleaseEnvironment().setSettings( settings )
+        return new DefaultForeachEnvironment().setSettings( settings )
                 .setJavaHome( javaHome )
                 .setMavenHome( mavenHome )
                 .setLocalRepositoryDirectory( localRepoDirectory )

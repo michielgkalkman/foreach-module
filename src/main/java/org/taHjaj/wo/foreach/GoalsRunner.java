@@ -4,6 +4,7 @@ import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.StringUtils;
 import org.sonatype.plexus.components.cipher.PlexusCipherException;
+import org.taHjaj.wo.foreach.env.ForeachEnvironment;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +32,7 @@ public class GoalsRunner
     }
 
     @Override
-    public ReleaseResult execute(ForeachDescriptor releaseDescriptor, ReleaseEnvironment releaseEnvironment,
+    public ReleaseResult execute(ForeachDescriptor releaseDescriptor, ForeachEnvironment releaseEnvironment,
                                  List<MavenProject> reactorProjects )
     {
         final String mavenExecutorId = releaseEnvironment.getMavenExecutorId();
@@ -55,7 +56,7 @@ public class GoalsRunner
         return null;
     }
 
-    private ReleaseResult runLogic(ForeachDescriptor releaseDescriptor, ReleaseEnvironment releaseEnvironment,
+    private ReleaseResult runLogic(ForeachDescriptor releaseDescriptor, ForeachEnvironment releaseEnvironment,
                                    MavenProject reactorProject, boolean simulate )
             throws ReleaseExecutionException
     {
@@ -93,7 +94,7 @@ public class GoalsRunner
     }
 
     @Override
-    public ReleaseResult simulate(ForeachDescriptor releaseDescriptor, ReleaseEnvironment releaseEnvironment,
+    public ReleaseResult simulate(ForeachDescriptor releaseDescriptor, ForeachEnvironment releaseEnvironment,
                                   List<MavenProject> reactorProjects ) {
         reactorProjects.forEach( mavenProject -> {
             try {
@@ -106,7 +107,7 @@ public class GoalsRunner
         return null;    }
 
     @Override
-    public ReleaseResult execute(ForeachDescriptor releaseDescriptor, ReleaseEnvironment releaseEnvironment,
+    public ReleaseResult execute(ForeachDescriptor releaseDescriptor, ForeachEnvironment releaseEnvironment,
                                  File workingDirectory, String additionalArguments )
             throws ReleaseExecutionException
     {

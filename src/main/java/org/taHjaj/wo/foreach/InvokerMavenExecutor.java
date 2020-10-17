@@ -30,6 +30,7 @@ import org.apache.maven.shared.utils.cli.CommandLineException;
 import org.codehaus.plexus.logging.Logger;
 import org.codehaus.plexus.util.cli.CommandLineUtils;
 import org.sonatype.plexus.components.cipher.PlexusCipherException;
+import org.taHjaj.wo.foreach.env.ForeachEnvironment;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -358,7 +359,7 @@ public class InvokerMavenExecutor
     }
 
     @Override
-    public void executeGoals( File workingDirectory, List<String> goals, ReleaseEnvironment releaseEnvironment,
+    public void executeGoals( File workingDirectory, List<String> goals, ForeachEnvironment releaseEnvironment,
                               boolean interactive, String additionalArguments, String pomFileName,
                               ReleaseResult result )
         throws MavenExecutorException

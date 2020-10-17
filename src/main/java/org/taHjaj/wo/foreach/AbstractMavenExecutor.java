@@ -34,6 +34,7 @@ import org.sonatype.plexus.components.sec.dispatcher.DefaultSecDispatcher;
 import org.sonatype.plexus.components.sec.dispatcher.SecDispatcherException;
 import org.sonatype.plexus.components.sec.dispatcher.SecUtil;
 import org.sonatype.plexus.components.sec.dispatcher.model.SettingsSecurity;
+import org.taHjaj.wo.foreach.env.ForeachEnvironment;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public abstract class AbstractMavenExecutor
     }
 
     @Override
-    public void executeGoals( File workingDirectory, String goals, ReleaseEnvironment releaseEnvironment,
+    public void executeGoals( File workingDirectory, String goals, ForeachEnvironment releaseEnvironment,
                               boolean interactive, String additionalArguments, String pomFileName,
                               ReleaseResult result )
         throws MavenExecutorException
@@ -82,10 +83,10 @@ public abstract class AbstractMavenExecutor
                 , result);
     }
 
-    protected abstract void executeGoals( File workingDirectory, List<String> goals,
-                                          ReleaseEnvironment releaseEnvironment, boolean interactive,
-                                          String additionalArguments, String pomFileName,
-                                          ReleaseResult releaseResult)
+    protected abstract void executeGoals(File workingDirectory, List<String> goals,
+                                         ForeachEnvironment releaseEnvironment, boolean interactive,
+                                         String additionalArguments, String pomFileName,
+                                         ReleaseResult releaseResult)
         throws MavenExecutorException, MavenExecutorException;
 
     protected final Logger getLogger()
