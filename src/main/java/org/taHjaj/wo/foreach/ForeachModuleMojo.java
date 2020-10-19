@@ -138,8 +138,12 @@ public final class ForeachModuleMojo
 
             releaseDescriptor.setGoals( goals );
 
-            new GoalsRunner(getLog()).execute( releaseDescriptor.build(), getReleaseEnvironment(),
+            final ForeachResult foreachResult = new GoalsRunner(getLog()).execute(releaseDescriptor.build(), getReleaseEnvironment(),
                     getReactorProjects());
+
+            if( foreachResult != null && foreachResult.getResultCode() == ForeachResult.ERROR) {
+                throw new MojoExecutionException(foreachResult.getOutput());
+            }
         }
         catch (PlexusCipherException e )
         {

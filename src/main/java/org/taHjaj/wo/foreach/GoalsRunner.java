@@ -47,21 +47,51 @@ public class GoalsRunner
         final String mavenExecutorId = releaseEnvironment.getMavenExecutorId();
         getLogger().info( String.format( "mavenexecutorid: %s%n", mavenExecutorId));
 
-        reactorProjects.forEach( mavenProject -> {
-            try {
-                final List<String> modules = mavenProject.getModules();
-                boolean fHasModules = !modules.isEmpty();
+        Map<String, ForeachResult> reactorProjectName2ForeachResult = new HashMap<>();
 
-                if( fHasModules) {
-                    getLogger().info(  String.format( "Project %s has modules - skipped%n", mavenProject.getBasedir().getCanonicalPath()));
-                } else {
-                    getLogger().info(  String.format( "Project %s has no modules - executing goald%n", mavenProject.getBasedir().getCanonicalPath()));
-                    runLogic(releaseDescriptor, releaseEnvironment, mavenProject, false);
+        try {
+            for (MavenProject mavenProject : reactorProjects) {
+                try {
+                    final List<String> modules = mavenProject.getModules();
+                    boolean fHasModules = !modules.isEmpty();
+
+                    if (fHasModules) {
+                        getLogger().info(String.format("Project %s has modules - skipped%n", mavenProject.getBasedir().getCanonicalPath()));
+                    } else {
+                        getLogger().info(String.format("Project %s has no modules - executing goald%n", mavenProject.getBasedir().getCanonicalPath()));
+                        final ForeachResult foreachResult = runLogic(releaseDescriptor, releaseEnvironment, mavenProject, false);
+
+                        reactorProjectName2ForeachResult.put(mavenProject.getName(), foreachResult);
+
+                        if (foreachResult.getResultCode() == ForeachResult.ERROR) {
+                            return foreachResult;
+                        }
+                    }
+                } catch (IOException | ForeachExecutionException e) {
+                    final ForeachResult foreachResult = new ForeachResult();
+                    foreachResult.appendError(e);
+                    getLogger().error(String.format("Error executing %s%n", mavenProject.getName()), e);
+                    reactorProjectName2ForeachResult.put(mavenProject.getName(), foreachResult);
+                    return foreachResult;
                 }
-            } catch (IOException | ForeachExecutionException e) {
-                e.printStackTrace();
             }
-        });
+        } finally {
+            getLogger().info(org.apache.maven.shared.utils.StringUtils.center( "foreach", 60, "-"));
+            reactorProjectName2ForeachResult.forEach((key, value) -> {
+                final int resultCode = value.getResultCode();
+                final String resultCodeString;
+                if (resultCode == ForeachResult.ERROR) {
+                    resultCodeString = "ERROR";
+                } else if (resultCode == ForeachResult.SUCCESS) {
+                    resultCodeString = "SUCCESS";
+                } else {
+                    resultCodeString = "UNDEFINED";
+                }
+                getLogger().info(String.format("%-30s%30s", key, resultCodeString).replace(' ', '.'));
+            });
+            getLogger().info(org.apache.maven.shared.utils.StringUtils.center( "foreach", 60, "-"));
+        }
+
         return null;
     }
 
