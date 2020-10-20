@@ -32,7 +32,7 @@ will execute maven goals on the pom of module x.
 
 Sorry, there is no public repository yet where foreach-module can be found.
 
-Install it locally with:
+Copy the sources and install it locally with:
 
 ```
 mvn install
