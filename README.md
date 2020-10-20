@@ -1,4 +1,4 @@
-# foreach-module
+# Maven plugin foreach-module
 Execute maven goals for modules, not aggregate poms
 
 ## Warning
