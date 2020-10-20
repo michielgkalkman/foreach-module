@@ -197,8 +197,6 @@ public class GoalsRunner
             throw new ForeachExecutionException( e.getMessage(), e );
         }
 
-        result.setResultCode( ForeachResult.SUCCESS );
-
         return result;
     }
 }

@@ -364,7 +364,7 @@ public class InvokerMavenExecutor
     @Override
     public void executeGoals( File workingDirectory, List<String> goals, ForeachEnvironment releaseEnvironment,
                               boolean interactive, String additionalArguments, String pomFileName,
-                              ForeachResult result )
+                              ForeachResult foreachResult )
         throws MavenExecutorException
     {
         InvocationOutputHandler handler = getOutputHandler();
@@ -449,8 +449,10 @@ public class InvokerMavenExecutor
                 final int exitCode = invocationResult.getExitCode();
                 if ( exitCode != 0 )
                 {
-                    throw new MavenExecutorException("Maven execution failed, exit code: '" + exitCode + "\'", exitCode);
+                    throw new MavenExecutorException("Maven execution failed, exit code: '" + exitCode + "'", exitCode);
                 }
+
+                foreachResult.setResultCode(ForeachResult.SUCCESS);
             }
             catch ( MavenInvocationException e )
             {

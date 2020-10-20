@@ -89,7 +89,7 @@ public abstract class AbstractMavenExecutor
                                          ForeachEnvironment releaseEnvironment, boolean interactive,
                                          String additionalArguments, String pomFileName,
                                          ForeachResult releaseResult)
-        throws MavenExecutorException, MavenExecutorException;
+        throws MavenExecutorException;
 
     protected final Logger getLogger()
     {
