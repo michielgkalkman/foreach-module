@@ -35,16 +35,16 @@ public class GoalsRunner
     }
 
     @Override
-    protected String getGoals( ForeachDescriptor releaseDescriptor )
+    protected String getGoals( ForeachDescriptor foreachDescriptor )
     {
-        return releaseDescriptor.getGoals();
+        return foreachDescriptor.getGoals();
     }
 
     @Override
-    public ForeachResult execute(ForeachDescriptor releaseDescriptor, ForeachEnvironment releaseEnvironment,
+    public ForeachResult execute(ForeachDescriptor foreachDescriptor, ForeachEnvironment foreachEnvironment,
                                  List<MavenProject> reactorProjects )
     {
-        final String mavenExecutorId = releaseEnvironment.getMavenExecutorId();
+        final String mavenExecutorId = foreachEnvironment.getMavenExecutorId();
         getLogger().info( String.format( "mavenexecutorid: %s%n", mavenExecutorId));
 
         Map<String, ForeachResult> reactorProjectName2ForeachResult = new HashMap<>();
@@ -55,11 +55,15 @@ public class GoalsRunner
                     final List<String> modules = mavenProject.getModules();
                     boolean fHasModules = !modules.isEmpty();
 
+                    final File basedir = mavenProject.getBasedir();
                     if (fHasModules) {
-                        getLogger().info(String.format("Project %s has modules - skipped%n", mavenProject.getBasedir().getCanonicalPath()));
+                        getLogger().info(String.format("Project %s has modules - skipped%n", basedir.getCanonicalPath()));
                     } else {
-                        getLogger().info(String.format("Project %s has no modules - executing goald%n", mavenProject.getBasedir().getCanonicalPath()));
-                        final ForeachResult foreachResult = runLogic(releaseDescriptor, releaseEnvironment, mavenProject, false);
+                        getLogger().info(String.format("Project %s has no modules - executing goals %s%n",
+                                basedir.getCanonicalPath(), foreachDescriptor.getGoals()));
+                        final ForeachResult foreachResult = runLogic(foreachDescriptor, foreachEnvironment, mavenProject, false);
+                        getLogger().info(String.format("Project %s has no modules - executing goals %s results in code %d%n",
+                                basedir.getCanonicalPath(), foreachDescriptor.getGoals(), foreachResult.getResultCode()));
 
                         reactorProjectName2ForeachResult.put(mavenProject.getName(), foreachResult);
 
@@ -95,12 +99,12 @@ public class GoalsRunner
         return null;
     }
 
-    private ForeachResult runLogic(ForeachDescriptor releaseDescriptor, ForeachEnvironment releaseEnvironment,
+    private ForeachResult runLogic(ForeachDescriptor foreachDescriptor, ForeachEnvironment foreachEnvironment,
                                    MavenProject reactorProject, boolean simulate )
             throws ForeachExecutionException
     {
-        String pomFileName = releaseDescriptor.getPomFileName();
-        String additionalArguments = getAdditionalArguments( releaseDescriptor );
+        String pomFileName = foreachDescriptor.getPomFileName();
+        String additionalArguments = getAdditionalArguments( foreachDescriptor );
 
         if ( pomFileName == null )
         {
@@ -129,16 +133,16 @@ public class GoalsRunner
             return result;
         }
 
-        return execute( releaseDescriptor, releaseEnvironment, reactorProject.getBasedir(), additionalArguments );
+        return execute( foreachDescriptor, foreachEnvironment, reactorProject.getBasedir(), additionalArguments );
     }
 
     @Override
-    public ForeachResult simulate(ForeachDescriptor releaseDescriptor, ForeachEnvironment releaseEnvironment,
+    public ForeachResult simulate(ForeachDescriptor foreachDescriptor, ForeachEnvironment foreachEnvironment,
                                   List<MavenProject> reactorProjects ) {
         reactorProjects.forEach( mavenProject -> {
             try {
                 System.out.printf("mavenProject: %s%n", mavenProject.getBasedir().getCanonicalPath());
-                runLogic( releaseDescriptor, releaseEnvironment, mavenProject, true );
+                runLogic( foreachDescriptor, foreachEnvironment, mavenProject, true );
             } catch (IOException | ForeachExecutionException e) {
                 e.printStackTrace();
             }
@@ -146,13 +150,13 @@ public class GoalsRunner
         return null;    }
 
     @Override
-    public ForeachResult execute(ForeachDescriptor releaseDescriptor, ForeachEnvironment releaseEnvironment,
+    public ForeachResult execute(ForeachDescriptor foreachDescriptor, ForeachEnvironment foreachEnvironment,
                                  File workingDirectory, String additionalArguments )
             throws ForeachExecutionException
     {
-        final String pomFileName1 = releaseDescriptor.getPomFileName();
-        final String mavenExecutorId = releaseEnvironment.getMavenExecutorId();
-        final String goals = releaseDescriptor.getGoals();
+        final String pomFileName1 = foreachDescriptor.getPomFileName();
+        final String mavenExecutorId = foreachEnvironment.getMavenExecutorId();
+        final String goals = foreachDescriptor.getGoals();
 
         ForeachResult result = new ForeachResult();
 
@@ -183,8 +187,8 @@ public class GoalsRunner
                     executionRoot = workingDirectory;
                     pomFileName = null;
                 }
-                mavenExecutor.executeGoals( executionRoot, goals, releaseEnvironment,
-                        releaseDescriptor.isInteractive(), additionalArguments,
+                mavenExecutor.executeGoals( executionRoot, goals, foreachEnvironment,
+                        foreachDescriptor.isInteractive(), additionalArguments,
                         pomFileName, result );
             }
         }
