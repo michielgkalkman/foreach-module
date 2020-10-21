@@ -24,7 +24,7 @@
     <scm>
         <url>https://github.com/michielgkalkman/foreach-module</url>
         <connection>scm:git:git@github.com:michielgkalkman/foreach-module.git</connection>
-        <developerConnection>scm:git:git@github.com:michielgkalkman/foreach-module.git</developerConnection>
+        <developerConnection>scm:git:https://github.com/michielgkalkman/foreach-module.git</developerConnection>
         <tag>foreach-module-1.0.0</tag>
     </scm>
 
