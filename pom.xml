@@ -22,6 +22,13 @@
         </code.coverage.exclusions>
     </properties>
 
+    <scm>
+        <url>https://github.com/michielgkalkman/foreach-module</url>
+        <connection>scm:git:git@github.com:michielgkalkman/foreach-module.git</connection>
+        <developerConnection>scm:git:git@github.com:michielgkalkman/foreach-module.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
