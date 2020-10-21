@@ -1,3 +1,4 @@
+# Based on stuff from https://blog.frankel.ch/github-actions-maven-releases/
 name: Release
 
 on:
