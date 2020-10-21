@@ -33,10 +33,10 @@ will execute maven goals on the pom of module x.
 
 ### Arguments
 
-You can provide arguments using -Darguments:
+You can provide arguments using -Dforeach.arguments:
 
 ```
-mvn org.taHjaj.wo:foreach-module:foreach -Darguments="-X" -Dforeach.goals="clean"
+mvn org.taHjaj.wo:foreach-module:foreach -Dforeach.arguments="-X" -Dforeach.goals="clean"
 ```
 
 ## Issues
@@ -46,7 +46,7 @@ mvn org.taHjaj.wo:foreach-module:foreach -Darguments="-X" -Dforeach.goals="clean
 No, it does, you just need to provide a space between -D and the key=value pair, like this:
 
 ```
-mvn org.taHjaj.wo:foreach-module:foreach -Darguments="-DdryRun=true" -Dforeach.goals=" release:clean release:prepare release:perform"
+mvn org.taHjaj.wo:foreach-module:foreach -Dforeach.arguments="-DdryRun=true" -Dforeach.goals=" release:clean release:prepare release:perform"
 ```
 
 ### It hangs
@@ -54,7 +54,7 @@ mvn org.taHjaj.wo:foreach-module:foreach -Darguments="-DdryRun=true" -Dforeach.g
 E.g.
 
 ```
-mvn org.taHjaj.wo:foreach-module:foreach -Darguments="-D dryRun=true" -Dforeach.goals=" release:clean release:prepare release:perform"
+mvn org.taHjaj.wo:foreach-module:foreach -Dforeach.arguments="-D dryRun=true" -Dforeach.goals=" release:clean release:prepare release:perform"
 ```
 
 hangs:
@@ -69,7 +69,7 @@ hangs:
 That is because one of the goals expects input. In case of the release plugin, simply add the -B flag:
 
 ```
-mvn org.taHjaj.wo:foreach-module:foreach -Darguments="-B -D dryRun=true" -Dforeach.goals=" release:clean release:prepare release:perform"
+mvn org.taHjaj.wo:foreach-module:foreach -Dforeach.arguments="-B -D dryRun=true" -Dforeach.goals=" release:clean release:prepare release:perform"
 ```
 
 ## Repository
