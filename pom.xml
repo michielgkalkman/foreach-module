@@ -19,6 +19,7 @@
             **/com/wkrzywiec/medium/noticeboard/entity/**,
             **/com/wkrzywiec/medium/noticeboard/Application.java
         </code.coverage.exclusions>
+        <project.scm.id>github</project.scm.id>
     </properties>
 
     <scm>
