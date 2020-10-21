@@ -46,7 +46,7 @@ mvn org.taHjaj.wo:foreach-module:foreach -Dforeach.arguments="-X" -Dforeach.goal
 No, it does, you just need to provide a space between -D and the key=value pair, like this:
 
 ```
-mvn org.taHjaj.wo:foreach-module:foreach -Dforeach.arguments="-DdryRun=true" -Dforeach.goals=" release:clean release:prepare release:perform"
+mvn org.taHjaj.wo:foreach-module:foreach -Dforeach.arguments="-D dryRun=true" -Dforeach.goals=" release:clean release:prepare release:perform"
 ```
 
 ### It hangs
