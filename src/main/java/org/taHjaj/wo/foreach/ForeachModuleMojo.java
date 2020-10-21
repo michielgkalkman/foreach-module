@@ -118,7 +118,7 @@ public final class ForeachModuleMojo
     /**
      * Additional arguments to pass to the Maven executions, separated by spaces.
      */
-    @Parameter( property = "arguments" )
+    @Parameter( property = "foreach.arguments" )
     private String arguments;
 
     public void execute()
