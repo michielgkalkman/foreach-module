@@ -108,13 +108,6 @@
             <version>18.0</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.apache.maven.release/maven-release-manager -->
-<!--        <dependency>-->
-<!--            <groupId>org.apache.maven.release</groupId>-->
-<!--            <artifactId>maven-release-manager</artifactId>-->
-<!--            <version>3.0.0-M1</version>-->
-<!--        </dependency>-->
-
         <!-- https://mvnrepository.com/artifact/org.codehaus.plexus/plexus-utils -->
         <dependency>
             <groupId>org.codehaus.plexus</groupId>
